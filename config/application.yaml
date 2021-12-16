@@ -1,0 +1,7 @@
+server:
+  # 运行端口号
+  port: 8012
+
+db:
+  # 访问密钥（放在请求头部）
+  secretKey: test_secret_key
