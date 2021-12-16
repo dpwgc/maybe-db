@@ -1,7 +1,6 @@
 package servers
 
 import (
-	"MaybeDB/models"
 	"time"
 )
 
@@ -25,7 +24,7 @@ func clear() {
 
 	dataMap.Range(func(key, value interface{}) bool {
 		// 如果数据到期
-		if value.(models.Data).ExpireTime <= nowTime {
+		if value.(Data).ExpireTime <= nowTime && value.(Data).ExpireTime != 0 {
 			//删除该数据
 			dataMap.Delete(key)
 		}

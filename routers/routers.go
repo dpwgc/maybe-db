@@ -23,8 +23,11 @@ func SetupRouters() (r *gin.Engine) {
 	conn.Use(middlewares.SafeMiddleWare)
 	{
 		conn.POST("/Set", servers.Set)
+		conn.POST("/Get", servers.Get)
+		conn.POST("/DetailGet", servers.DetailGet)
 		conn.POST("/Del", servers.Del)
 		conn.POST("/List", servers.List)
+		conn.POST("/DetailList", servers.DetailList)
 		conn.POST("/Count", servers.Count)
 	}
 	return

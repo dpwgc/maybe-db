@@ -10,6 +10,8 @@
 
 * 插入数据（仅支持string类型的value）
 
+* 根据key查找value
+
 * 给数据设置过期时间
 
 * 自动清除过期数据
@@ -26,9 +28,9 @@
 
 * config.go `项目配置文件加载`
 
-##### models 实体类
+##### middlewares 中间件
 
-* model.go `数据模板`
+* 访问密钥验证
 
 ##### routers 路由
 
