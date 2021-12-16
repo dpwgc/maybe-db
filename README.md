@@ -2,7 +2,7 @@
 
 ## 基于Golang的简易key-value内存型数据库
 
-`Golang` `Gin` `sync.Map` `DB`
+`Golang` `Gin` `sync.Map`
 
 ***
 
