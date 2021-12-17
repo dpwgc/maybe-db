@@ -104,4 +104,18 @@ isMaster: 1
 isMaster: 0
 ```
 
-* 将主从节点打包好，分别部署上服务器即可。
+* 将主从节点打包好，分别上传至服务器运行即可。
+
+```
+Windows
+/上传文件目录
+    main.exe  # 打包后的文件
+    /config   # 配置目录
+        application.yaml    # 配置文件
+    
+Linux
+/上传文件目录
+    main      # 打包后的文件
+    /config   # 配置目录
+        application.yaml    # 配置文件
+```
