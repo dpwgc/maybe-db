@@ -11,10 +11,15 @@ server:
 
 # nacos注册中心配置
 nacos:
+  # Nacos所在服务器IP/域名
   ipAddr: VM-8-12-centos
   contextPath: /nacos
   port: 8848
   scheme: http
+  # 日志存储路径
+  logDir: log
+  # 缓存service信息的目录
+  cacheDir: cache
 
 # 数据库配置
 db:

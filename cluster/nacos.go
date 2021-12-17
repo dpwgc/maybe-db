@@ -17,8 +17,8 @@ func NacosInit() {
 		NamespaceId:         "",
 		TimeoutMs:           5000,
 		NotLoadCacheAtStart: true,
-		LogDir:              "log",   // 日志存储路径
-		CacheDir:            "cache", // 缓存service信息的目录，默认是当前运行目录
+		LogDir:              viper.GetString("nacos.logDir"),   // 日志存储路径
+		CacheDir:            viper.GetString("nacos.cacheDir"), // 缓存service信息的目录
 		RotateTime:          "1h",
 		MaxAge:              3,
 		LogLevel:            "debug",

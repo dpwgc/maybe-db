@@ -34,7 +34,7 @@
 
 ### 项目结构
 
-##### cluster 集群相关服务
+##### cluster 集群相关
 
 * dataSync `主从数据同步`
 * nacos `Nacos注册中心连接`
