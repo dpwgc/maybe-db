@@ -8,8 +8,16 @@ import (
  * 数据存储
  */
 
+func init() {
+	CopyMap = make(map[string]interface{})
+}
+
 //使用sync.Map存放数据
 var DataMap sync.Map
+
+var CopyMap map[string]interface{}
+var ByteCopyMap []byte
+var JsonCopyMap string
 
 //数据模板
 type Data struct {

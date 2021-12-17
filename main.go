@@ -21,6 +21,7 @@ func main() {
 	config.InitConfig()
 
 	registry.NacosInit()
+	registry.SyncInit()
 
 	//初始化清理模块
 	servers.InitClear()

@@ -12,12 +12,12 @@ func InitClear() {
 	go func() {
 		for {
 			time.Sleep(time.Second * 1)
-			clear()
+			clearDataMap()
 		}
 	}()
 }
 
-func clear() {
+func clearDataMap() {
 
 	//获取当前时间戳
 	nowTime := time.Now().Unix()
