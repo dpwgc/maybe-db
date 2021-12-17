@@ -8,7 +8,7 @@
 
 ### 实现功能
 
-* 插入数据（支持string、int64、map、array类型的value）
+* 插入数据（支持string、int64、map、int类型数组的value）
 
 * 根据key查找value
 
@@ -51,5 +51,3 @@
 ### 使用说明
 
 * 填写application.yaml内的配置，运行main.go
-
-***

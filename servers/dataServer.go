@@ -9,7 +9,7 @@ import (
  */
 
 //使用sync.Map存放数据
-var dataMap sync.Map
+var DataMap sync.Map
 
 //数据模板
 type Data struct {

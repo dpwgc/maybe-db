@@ -2,7 +2,7 @@ package routers
 
 import (
 	"MaybeDB/middlewares"
-	"MaybeDB/servers"
+	"MaybeDB/servers/connServers"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -22,13 +22,17 @@ func SetupRouters() (r *gin.Engine) {
 	conn := r.Group("/Conn")
 	conn.Use(middlewares.SafeMiddleWare)
 	{
-		conn.POST("/Set", servers.Set)
-		conn.POST("/Get", servers.Get)
-		conn.POST("/DetailGet", servers.DetailGet)
-		conn.POST("/Del", servers.Del)
-		conn.POST("/List", servers.List)
-		conn.POST("/DetailList", servers.DetailList)
-		conn.POST("/Count", servers.Count)
+		conn.POST("/Set", connServers.Set)
+		conn.POST("/Get", connServers.Get)
+		conn.POST("/Del", connServers.Del)
+
+		conn.POST("/List", connServers.List)
+		conn.POST("/ListByKeyword", connServers.ListByKeyword)
+		conn.POST("/ListByPrefix", connServers.ListByPrefix)
+
+		conn.POST("/DetailGet", connServers.DetailGet)
+		conn.POST("/DetailList", connServers.DetailList)
+		conn.POST("/Count", connServers.Count)
 	}
 	return
 }
