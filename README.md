@@ -8,7 +8,7 @@
 
 ### 实现功能
 
-* 插入数据（仅支持string类型的value）
+* 插入数据（支持string、int64、map、array类型的value）
 
 * 根据key查找value
 
