@@ -90,7 +90,9 @@
 
 ### 部署方式
 
-* 在一台服务器上部署Nacos，填写各节点application.yaml配置文件中的Nacos配置信息。
+##### 集群部署
+
+* 在一台服务器上部署Nacos，添加命名空间(命名空间Id及命名空间名称设置为：maybe-db),填写各节点application.yaml配置文件中的Nacos配置信息。
 
 * 采用一主多从方式部署项目,主节点写数据，从节点读数据。
 
@@ -118,4 +120,13 @@ Linux
     main      # 打包后的文件
     /config   # 配置目录
         application.yaml    # 配置文件
+```
+
+##### 单机部署
+
+* 无需部署Nacos，将application.yaml配置文件中的isCluster设置为0，直接打包部署到服务器。
+
+```
+# 是否以集群方式部署（1:是，0:否）
+isCluster: 0
 ```
