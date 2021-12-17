@@ -22,11 +22,11 @@ func clear() {
 	//获取当前时间戳
 	nowTime := time.Now().Unix()
 
-	dataMap.Range(func(key, value interface{}) bool {
+	DataMap.Range(func(key, value interface{}) bool {
 		// 如果数据到期
 		if value.(Data).ExpireTime <= nowTime && value.(Data).ExpireTime != 0 {
 			//删除该数据
-			dataMap.Delete(key)
+			DataMap.Delete(key)
 		}
 		return true
 	})

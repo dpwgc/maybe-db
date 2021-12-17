@@ -26,7 +26,7 @@ func Get(c *gin.Context) {
 	})
 }
 
-//获取数据列表
+//获取全部数据列表
 func List(c *gin.Context) {
 
 	resMap := make(map[string]interface{})
@@ -57,7 +57,7 @@ func ListByKeyword(c *gin.Context) {
 
 	servers.DataMap.Range(func(key, value interface{}) bool {
 		//如果查找到关键字
-		if len(strings.Split(key.(string), keyword)) > 0 {
+		if len(strings.Split(key.(string), keyword)) > 1 {
 			resMap[key.(string)] = value.(servers.Data).Content
 			count++
 		}

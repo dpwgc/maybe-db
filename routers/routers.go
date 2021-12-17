@@ -32,6 +32,8 @@ func SetupRouters() (r *gin.Engine) {
 
 		conn.POST("/DetailGet", connServers.DetailGet)
 		conn.POST("/DetailList", connServers.DetailList)
+		conn.POST("/DetailListByKeyword", connServers.DetailListByKeyword)
+		conn.POST("/DetailListByPrefix", connServers.DetailListByPrefix)
 		conn.POST("/Count", connServers.Count)
 	}
 	return
