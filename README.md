@@ -1,6 +1,6 @@
 # MaybeDB
 
-## 基于Golang的简易key-value内存型数据库
+## 基于Golang的分布式key-value内存型数据库
 
 `Golang` `Gin` `sync.Map`
 
