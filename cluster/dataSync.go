@@ -1,4 +1,4 @@
-package registry
+package cluster
 
 import (
 	"MaybeDB/servers"
@@ -14,10 +14,19 @@ import (
  * 数据同步
  */
 
-//数据库主从节点之间的数据同步进程
+var ip string
+var port uint64
+
+//主从节点之间的数据同步
 func SyncInit() {
-	syncTime := viper.GetInt("db.syncTime")
-	isMaster := viper.GetInt("db.isMaster")
+
+	//加载配置信息
+	syncTime := viper.GetInt("server.syncTime")
+	isMaster := viper.GetInt("server.isMaster")
+	ip = viper.GetString("server.ip")
+	port = uint64(viper.GetInt("server.port"))
+
+	//开启主从同步协程
 	go func() {
 		//如果该节点是主节点
 		if isMaster == 1 {
@@ -46,9 +55,9 @@ func SyncInit() {
 //主节点更新nacos元数据(将主节点的DataMap拷贝到nacos元数据上)
 func updateMetadata() {
 	namingClient.UpdateInstance(vo.UpdateInstanceParam{
-		Ip:          viper.GetString("server.ip"),
-		Port:        uint64(viper.GetInt("server.port")),
-		ServiceName: "maybe-db",
+		Ip:          ip,
+		Port:        port,
+		ServiceName: "maybe-db-master",
 		Weight:      10,
 		Enable:      true,
 		Ephemeral:   true,
@@ -63,7 +72,7 @@ func updateMetadata() {
 func pullMetadata() {
 	//获取nacos上数据库主节点的元数据
 	instance, err := namingClient.SelectOneHealthyInstance(vo.SelectOneHealthInstanceParam{
-		ServiceName: "maybe-db",
+		ServiceName: "maybe-db-master",
 		GroupName:   "MAYBE_DB_GROUP",
 		Clusters:    []string{"MAYBE_DB"},
 	})
@@ -72,14 +81,14 @@ func pullMetadata() {
 		return
 	}
 
-	//解析元数据
+	//解析元数据到masterMap集合
 	masterMap, err := utils.JsonToData(instance.Metadata["DataMap"])
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	//将主节点map内的数据循环写入从节点map
+	//将主节点map内的数据（masterMap）循环写入从节点map（DataMap）
 	for key, value := range masterMap {
 		servers.DataMap.Store(key, value)
 	}

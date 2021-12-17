@@ -1,9 +1,15 @@
 # 服务配置
 server:
+  # 本地ip
   ip: 127.0.0.1
+  # 本地端口
   port: 8012
+  # 节点之间数据同步的时间间隔
+  syncTime: 2
+  # 是否为主节点（1:是，0:不是）
+  isMaster: 1
 
-# nacos配置
+# nacos注册中心配置
 nacos:
   ipAddr: VM-8-12-centos
   contextPath: /nacos
@@ -14,7 +20,3 @@ nacos:
 db:
   # 访问密钥（放在请求头部）
   secretKey: test_secret_key
-  # 数据库节点间数据同步时间间隔
-  syncTime: 3
-  # 是否为主节点（1:是，0:不是）
-  isMaster: 1
