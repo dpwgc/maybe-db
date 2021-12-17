@@ -1,7 +1,16 @@
+# 服务配置
 server:
-  # 运行端口号
+  ip: 127.0.0.1
   port: 8012
 
+# nacos配置
+nacos:
+  ipAddr: VM-8-12-centos
+  contextPath: /nacos
+  port: 8848
+  scheme: http
+
+# 数据库配置
 db:
   # 访问密钥（放在请求头部）
   secretKey: test_secret_key

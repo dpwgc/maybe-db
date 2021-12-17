@@ -2,7 +2,7 @@ package routers
 
 import (
 	"MaybeDB/middlewares"
-	"MaybeDB/servers/connServers"
+	"MaybeDB/servers/clientServers"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -19,22 +19,22 @@ func SetupRouters() (r *gin.Engine) {
 	r.Use(Cors())
 
 	//客户端连接
-	conn := r.Group("/Conn")
+	conn := r.Group("/Client")
 	conn.Use(middlewares.SafeMiddleWare)
 	{
-		conn.POST("/Set", connServers.Set)
-		conn.POST("/Get", connServers.Get)
-		conn.POST("/Del", connServers.Del)
+		conn.POST("/Set", clientServers.Set)
+		conn.POST("/Get", clientServers.Get)
+		conn.POST("/Del", clientServers.Del)
 
-		conn.POST("/List", connServers.List)
-		conn.POST("/ListByKeyword", connServers.ListByKeyword)
-		conn.POST("/ListByPrefix", connServers.ListByPrefix)
+		conn.POST("/List", clientServers.List)
+		conn.POST("/ListByKeyword", clientServers.ListByKeyword)
+		conn.POST("/ListByPrefix", clientServers.ListByPrefix)
 
-		conn.POST("/DetailGet", connServers.DetailGet)
-		conn.POST("/DetailList", connServers.DetailList)
-		conn.POST("/DetailListByKeyword", connServers.DetailListByKeyword)
-		conn.POST("/DetailListByPrefix", connServers.DetailListByPrefix)
-		conn.POST("/Count", connServers.Count)
+		conn.POST("/DetailGet", clientServers.DetailGet)
+		conn.POST("/DetailList", clientServers.DetailList)
+		conn.POST("/DetailListByKeyword", clientServers.DetailListByKeyword)
+		conn.POST("/DetailListByPrefix", clientServers.DetailListByPrefix)
+		conn.POST("/Count", clientServers.Count)
 	}
 	return
 }

@@ -1,4 +1,4 @@
-package connServers
+package clientServers
 
 import (
 	"MaybeDB/servers"

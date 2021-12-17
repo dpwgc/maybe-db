@@ -2,6 +2,7 @@ package main
 
 import (
 	"MaybeDB/config"
+	"MaybeDB/registry"
 	"MaybeDB/routers"
 	"MaybeDB/servers"
 	_ "fmt"
@@ -18,6 +19,8 @@ func main() {
 
 	//加载配置
 	config.InitConfig()
+
+	registry.NacosInit()
 
 	//初始化清理模块
 	servers.InitClear()

@@ -46,7 +46,7 @@
 
 ##### servers 服务层
 
-* connServers `客户端连接相关操作`
+* clientConnServers `客户端连接相关操作`
 
 ```
 setServer 存储数据相关操作
