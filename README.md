@@ -81,9 +81,18 @@
 * 运行项目：
 
 ```
-直接运行main.go(调试)
-打包成exe运行(windows)
-打包成二进制文件运行(linux)
+GoLand直接运行main.go(调试)
+
+打包成exe运行(windows部署)
+GoLand终端cd到项目根目录，执行go build main.go命令，生成main.exe文件
+
+打包成二进制文件运行(linux部署)
+cmd终端cd到项目根目录，依次执行下列命令：
+SET CGO_ENABLED=0
+SET GOOS=linux
+SET GOARCH=amd64
+go build main.go
+生成main文件
 ```
 
 ***
