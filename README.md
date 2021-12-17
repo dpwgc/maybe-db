@@ -34,6 +34,13 @@
 
 ### 项目结构
 
+##### clientConn 客户端连接操作
+
+* setConn `存储数据相关操作`
+* getConn `获取数据相关操作`
+* delConn `删除数据相关`
+* detailConn `获取数据详情相关操作`
+
 ##### cluster 集群相关
 
 * dataSync `主从数据同步`
@@ -54,15 +61,6 @@
 * routers.go `路由配置`
 
 ##### servers 服务层
-
-* clientConnServers `客户端连接相关操作`
-
-```
-setServer 存储数据相关操作
-getServer 获取数据相关操作
-delServer 删除数据相关
-detailServer 获取数据详情相关操作
-```
 
 * clearServer `实时清理过期数据`
 

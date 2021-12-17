@@ -1,4 +1,4 @@
-package clientServers
+package clientConn
 
 import (
 	"MaybeDB/servers"
@@ -6,35 +6,28 @@ import (
 	"strings"
 )
 
-//根据key获取数据
-func Get(c *gin.Context) {
+//根据key获取数据详情（展示数据的过期时间及数据类型）
+func DetailGet(c *gin.Context) {
 
 	key, _ := c.GetPostForm("key")
 
 	value, _ := servers.DataMap.Load(key)
-	if value == nil {
-		c.JSON(-1, gin.H{
-			"code": -1,
-			"msg":  "value cannot be empty",
-		})
-		return
-	}
 
 	c.JSON(0, gin.H{
 		"code": 0,
-		"data": value.(servers.Data).Content,
+		"data": value.(servers.Data),
 	})
 }
 
-//获取全部数据列表
-func List(c *gin.Context) {
+//获取全部数据详情列表（展示数据的过期时间及数据类型）
+func DetailList(c *gin.Context) {
 
-	resMap := make(map[string]interface{})
+	resMap := make(map[string]servers.Data)
 
 	var count int64 = 0
 
 	servers.DataMap.Range(func(key, value interface{}) bool {
-		resMap[key.(string)] = value.(servers.Data).Content
+		resMap[key.(string)] = value.(servers.Data)
 		count++
 		return true
 	})
@@ -46,8 +39,8 @@ func List(c *gin.Context) {
 	})
 }
 
-//根据关键字获取数据列表
-func ListByKeyword(c *gin.Context) {
+//根据关键字获取数据详情列表（展示数据的过期时间及数据类型）
+func DetailListByKeyword(c *gin.Context) {
 
 	keyword, _ := c.GetPostForm("keyword")
 
@@ -58,7 +51,7 @@ func ListByKeyword(c *gin.Context) {
 	servers.DataMap.Range(func(key, value interface{}) bool {
 		//如果查找到关键字
 		if len(strings.Split(key.(string), keyword)) > 1 {
-			resMap[key.(string)] = value.(servers.Data).Content
+			resMap[key.(string)] = value.(servers.Data)
 			count++
 		}
 		return true
@@ -71,8 +64,8 @@ func ListByKeyword(c *gin.Context) {
 	})
 }
 
-//根据key前缀获取数据列表
-func ListByPrefix(c *gin.Context) {
+//根据key前缀获取数据详情列表（展示数据的过期时间及数据类型）
+func DetailListByPrefix(c *gin.Context) {
 
 	prefix, _ := c.GetPostForm("prefix")
 	size := len(prefix)
@@ -93,7 +86,7 @@ func ListByPrefix(c *gin.Context) {
 			}
 		}
 		//匹配成功
-		resMap[key.(string)] = value.(servers.Data).Content
+		resMap[key.(string)] = value.(servers.Data)
 		count++
 		return true
 	})
@@ -102,5 +95,21 @@ func ListByPrefix(c *gin.Context) {
 		"code":  0,
 		"count": count,
 		"data":  resMap,
+	})
+}
+
+//获取当前数据总数
+func Count(c *gin.Context) {
+
+	var count int64 = 0
+
+	servers.DataMap.Range(func(key, value interface{}) bool {
+		count++
+		return true
+	})
+
+	c.JSON(0, gin.H{
+		"code":  0,
+		"count": count,
 	})
 }
