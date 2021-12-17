@@ -20,8 +20,12 @@ func main() {
 	//加载配置
 	config.InitConfig()
 
-	cluster.NacosInit()
-	cluster.SyncInit()
+	//是否以集群方式部署
+	isCluster := viper.GetInt("server.isCluster")
+	if isCluster == 1 {
+		cluster.NacosInit()
+		cluster.SyncInit()
+	}
 
 	//初始化清理模块
 	servers.InitClear()
