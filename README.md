@@ -37,13 +37,17 @@
 ##### clientConn 客户端连接操作
 
 * setConn `存储数据相关操作`
+
 * getConn `获取数据相关操作`
+
 * delConn `删除数据相关`
+
 * detailConn `获取数据详情相关操作`
 
 ##### cluster 集群相关
 
 * dataSync `主从数据同步`
+
 * nacos `Nacos注册中心连接`
 
 ##### config 配置类
