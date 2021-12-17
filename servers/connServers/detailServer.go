@@ -39,7 +39,7 @@ func DetailList(c *gin.Context) {
 	})
 }
 
-//根据关键字获取数据列表
+//根据关键字获取数据详情列表（展示数据的过期时间及数据类型）
 func DetailListByKeyword(c *gin.Context) {
 
 	keyword, _ := c.GetPostForm("keyword")
@@ -64,7 +64,7 @@ func DetailListByKeyword(c *gin.Context) {
 	})
 }
 
-//根据key前缀获取数据列表
+//根据key前缀获取数据详情列表（展示数据的过期时间及数据类型）
 func DetailListByPrefix(c *gin.Context) {
 
 	prefix, _ := c.GetPostForm("prefix")

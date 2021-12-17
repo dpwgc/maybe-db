@@ -65,7 +65,7 @@ func Set(c *gin.Context) {
 		}
 		break
 
-	//map类型的值（value为json字符串，例：`{"id": 1, "text": "hello"}`）
+	//map类型的值（value为json字符串，例：`{"id": "1", "text": "hello"}`）
 	case 3:
 		//json转map
 		content, err = utils.JsonToMap(value)
