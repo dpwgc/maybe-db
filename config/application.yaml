@@ -15,4 +15,6 @@ db:
   # 访问密钥（放在请求头部）
   secretKey: test_secret_key
   # 数据库节点间数据同步时间间隔
-  syncTime: 5
+  syncTime: 3
+  # 是否为主节点（1:是，0:不是）
+  isMaster: 1
