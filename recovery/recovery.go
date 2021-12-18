@@ -23,21 +23,26 @@ func RecoveryInit() {
 	// 数据恢复策略
 	recoveryStrategy := viper.GetInt("server.recoveryStrategy")
 
+	//不进行数据恢复
+	if recoveryStrategy == 0 {
+		return
+	}
+
 	//从本地持久化文件中获取数据
 	if recoveryStrategy == 1 {
 		//云端恢复数据
-		RecoveryFromLocal()
+		recoveryFromLocal()
 	}
 
 	//从集群其他健康的主节点获取数据
 	if recoveryStrategy == 2 && isCluster == 1 && isMaster == 1 {
 		//云端恢复数据
-		RecoveryFromCluster()
+		recoveryFromCluster()
 	}
 }
 
 //从主节点集群中获取数据进行恢复工作
-func RecoveryFromCluster() {
+func recoveryFromCluster() {
 
 	//获取一个健康的主节点实例，获取主节点上的Nacos元数据
 	instance, err := cluster.NamingClient.SelectOneHealthyInstance(vo.SelectOneHealthInstanceParam{
@@ -64,7 +69,7 @@ func RecoveryFromCluster() {
 }
 
 //从本地持久化文件中获取数据进行恢复工作
-func RecoveryFromLocal() {
+func recoveryFromLocal() {
 
 	//获取一个健康的主节点实例，获取主节点上的Nacos元数据
 	instance, err := cluster.NamingClient.SelectOneHealthyInstance(vo.SelectOneHealthInstanceParam{
