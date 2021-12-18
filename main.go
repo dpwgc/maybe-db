@@ -18,10 +18,13 @@ import (
 
 func main() {
 
-	//加载配置
+	//加载配置文件
 	config.ConfigInit()
 
-	//数据恢复
+	//加载文件操作模块
+	diskStorage.FileInit()
+
+	//加载数据恢复模块
 	diskStorage.RecoveryInit()
 
 	//是否开启持久化

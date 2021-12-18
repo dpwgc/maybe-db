@@ -18,7 +18,7 @@ var rFile *os.File
 var path string
 
 //初始化文件
-func init() {
+func FileInit() {
 
 	path = viper.GetString("db.persistentPath")
 	//判断持久化文件是否存在
@@ -39,6 +39,7 @@ func Write() {
 	writer := csv.NewWriter(wFile)
 	err = writer.Write([]string{servers.PersCopyJson})
 	if err != nil {
+		fmt.Print("Write:")
 		fmt.Println(err)
 		return
 	}
@@ -46,6 +47,7 @@ func Write() {
 	//关闭文件流
 	err = wFile.Close()
 	if err != nil {
+		fmt.Print("Write Close:")
 		fmt.Println(err)
 	}
 }
@@ -56,6 +58,7 @@ func Read() {
 	//读文件，设置为只读，权限设置为777
 	rFile, err = os.OpenFile(path, os.O_RDONLY, 0777)
 	if err != nil {
+		fmt.Print("Read OpenFile:")
 		fmt.Println(err)
 		return
 	}
@@ -63,12 +66,18 @@ func Read() {
 	reader.FieldsPerRecord = -1
 	record, err := reader.ReadAll()
 	if err != nil {
+		fmt.Print("Read ReadAll:")
 		fmt.Println(err)
+		return
+	}
+	if len(record) == 0 {
+		fmt.Println("EOF")
 		return
 	}
 	//解析本地持久化文件的数据到localMap
 	localMap, err := utils.JsonToData(record[0][0])
 	if err != nil {
+		fmt.Print("Read JsonToData:")
 		fmt.Println(err)
 		return
 	}
@@ -79,6 +88,7 @@ func Read() {
 	}
 	err = rFile.Close()
 	if err != nil {
+		fmt.Print("Read Close:")
 		fmt.Println(err)
 	}
 }
