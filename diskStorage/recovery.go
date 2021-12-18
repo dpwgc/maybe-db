@@ -4,9 +4,11 @@ import (
 	"MaybeDB/cluster"
 	"MaybeDB/servers"
 	"MaybeDB/utils"
+	"encoding/json"
 	"fmt"
 	"github.com/nacos-group/nacos-sdk-go/vo"
 	"github.com/spf13/viper"
+	"strconv"
 )
 
 /*
@@ -48,7 +50,7 @@ func RecoveryInit() {
 //从主节点集群中获取数据进行恢复工作
 func recoveryFromCluster() {
 
-	//获取一个健康的主节点实例，获取主节点上的Nacos元数据
+	//获取一个健康的主节点实例
 	instance, err := cluster.NamingClient.SelectOneHealthyInstance(vo.SelectOneHealthInstanceParam{
 		ServiceName: "maybe-db-master",
 		GroupName:   "MAYBE_DB_GROUP",
@@ -59,8 +61,23 @@ func recoveryFromCluster() {
 		return
 	}
 
-	//解析元数据到masterMap集合
-	masterMap, err := utils.JsonToData(instance.Metadata["DataMap"])
+	//设置请求头
+	header := make(map[string]string, 1)
+	//访问密钥
+	header["secretKey"] = viper.GetString("db.secretKey")
+
+	//向该主节点请求数据
+	url := fmt.Sprintf("%s%s%s%s%s", "http://", instance.Ip, ":", strconv.Itoa(int(instance.Port)), "/Sync/GetMasterData")
+	resStr, err := utils.Get(url, header)
+
+	var res string
+	err = json.Unmarshal([]byte(resStr), &res)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//解析数据到masterMap集合
+	masterMap, err := utils.JsonToData(res)
 	if err != nil {
 		fmt.Println(err)
 		return

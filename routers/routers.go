@@ -2,6 +2,7 @@ package routers
 
 import (
 	"MaybeDB/clientConns"
+	"MaybeDB/cluster"
 	"MaybeDB/middlewares"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -19,22 +20,28 @@ func SetupRouters() (r *gin.Engine) {
 	r.Use(Cors())
 
 	//客户端连接
-	conn := r.Group("/Client")
-	conn.Use(middlewares.SafeMiddleWare)
+	client := r.Group("/Client")
+	client.Use(middlewares.SafeMiddleWare)
 	{
-		conn.POST("/Set", clientConns.Set)
-		conn.GET("/Get", clientConns.Get)
-		conn.DELETE("/Del", clientConns.Del)
+		client.POST("/Set", clientConns.Set)
+		client.GET("/Get", clientConns.Get)
+		client.DELETE("/Del", clientConns.Del)
 
-		conn.GET("/List", clientConns.List)
-		conn.GET("/ListByKeyword", clientConns.ListByKeyword)
-		conn.GET("/ListByPrefix", clientConns.ListByPrefix)
+		client.GET("/List", clientConns.List)
+		client.GET("/ListByKeyword", clientConns.ListByKeyword)
+		client.GET("/ListByPrefix", clientConns.ListByPrefix)
 
-		conn.GET("/DetailGet", clientConns.DetailGet)
-		conn.GET("/DetailList", clientConns.DetailList)
-		conn.GET("/DetailListByKeyword", clientConns.DetailListByKeyword)
-		conn.GET("/DetailListByPrefix", clientConns.DetailListByPrefix)
-		conn.GET("/Count", clientConns.Count)
+		client.GET("/DetailGet", clientConns.DetailGet)
+		client.GET("/DetailList", clientConns.DetailList)
+		client.GET("/DetailListByKeyword", clientConns.DetailListByKeyword)
+		client.GET("/DetailListByPrefix", clientConns.DetailListByPrefix)
+		client.GET("/Count", clientConns.Count)
+	}
+	//主从复制连接
+	sync := r.Group("/Sync")
+	sync.Use(middlewares.SafeMiddleWare)
+	{
+		sync.GET("/GetMasterData", cluster.GetMasterData)
 	}
 	return
 }

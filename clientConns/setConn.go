@@ -154,7 +154,7 @@ func masterSetSync(key string, value string, valueType string, expireTime string
 	})
 
 	//设置请求头
-	header := make(map[string]string, 1)
+	header := make(map[string]string, 2)
 	//标记，表明该请求是主节点集群同步数据，不是客户端发来的数据
 	header["isOtherMasterSet"] = "1"
 	//访问密钥
