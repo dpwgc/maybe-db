@@ -54,7 +54,7 @@ func NacosInit() {
 		//将主节点ServiceName标记为maybe-db-master
 		serviceName = "maybe-db-master"
 		//将DataMap数据同步到nacos元数据
-		matedata = map[string]string{"DataMap": servers.JsonCopyMap}
+		matedata = map[string]string{"DataMap": servers.SyncCopyJson}
 	}
 
 	//如果该节点是从节点

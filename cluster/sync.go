@@ -66,7 +66,7 @@ func updateMetadata() {
 		Weight:      10,
 		Enable:      true,
 		Ephemeral:   true,
-		Metadata:    map[string]string{"DataMap": servers.JsonCopyMap}, //将主节点DataMap以Json字符串形式存入Nacos元数据
+		Metadata:    map[string]string{"DataMap": servers.SyncCopyJson}, //将主节点DataMap以Json字符串形式存入Nacos元数据
 		ClusterName: "MAYBE_DB_CLUSTER",
 		GroupName:   "MAYBE_DB_GROUP",
 	})
@@ -75,13 +75,13 @@ func updateMetadata() {
 //复制该主节点的本地数据
 func copyDataMap() {
 	servers.DataMap.Range(func(key, value interface{}) bool {
-		servers.CopyMap[key.(string)] = value
+		servers.SyncCopyMap[key.(string)] = value
 		return true
 	})
-	//将CopyMap转为字节数组类型ByteCopyMap
-	servers.ByteCopyMap, _ = json.Marshal(servers.CopyMap)
-	//将ByteCopyMap转为Json字符串类型
-	servers.JsonCopyMap = string(servers.ByteCopyMap)
+	//将SyncCopyMap转为字节数组类型SyncCopyByte
+	servers.SyncCopyByte, _ = json.Marshal(servers.SyncCopyMap)
+	//将SyncCopyByte转为Json字符串类型
+	servers.SyncCopyJson = string(servers.SyncCopyByte)
 }
 
 /*

@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"MaybeDB/clientConn"
+	"MaybeDB/clientConns"
 	"MaybeDB/middlewares"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -22,19 +22,19 @@ func SetupRouters() (r *gin.Engine) {
 	conn := r.Group("/Client")
 	conn.Use(middlewares.SafeMiddleWare)
 	{
-		conn.POST("/Set", clientConn.Set)
-		conn.GET("/Get", clientConn.Get)
-		conn.DELETE("/Del", clientConn.Del)
+		conn.POST("/Set", clientConns.Set)
+		conn.GET("/Get", clientConns.Get)
+		conn.DELETE("/Del", clientConns.Del)
 
-		conn.GET("/List", clientConn.List)
-		conn.GET("/ListByKeyword", clientConn.ListByKeyword)
-		conn.GET("/ListByPrefix", clientConn.ListByPrefix)
+		conn.GET("/List", clientConns.List)
+		conn.GET("/ListByKeyword", clientConns.ListByKeyword)
+		conn.GET("/ListByPrefix", clientConns.ListByPrefix)
 
-		conn.GET("/DetailGet", clientConn.DetailGet)
-		conn.GET("/DetailList", clientConn.DetailList)
-		conn.GET("/DetailListByKeyword", clientConn.DetailListByKeyword)
-		conn.GET("/DetailListByPrefix", clientConn.DetailListByPrefix)
-		conn.GET("/Count", clientConn.Count)
+		conn.GET("/DetailGet", clientConns.DetailGet)
+		conn.GET("/DetailList", clientConns.DetailList)
+		conn.GET("/DetailListByKeyword", clientConns.DetailListByKeyword)
+		conn.GET("/DetailListByPrefix", clientConns.DetailListByPrefix)
+		conn.GET("/Count", clientConns.Count)
 	}
 	return
 }

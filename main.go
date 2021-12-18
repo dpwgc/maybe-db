@@ -20,6 +20,12 @@ func main() {
 	//加载配置
 	config.InitConfig()
 
+	//是否开启持久化
+	isPersistent := viper.GetInt("db.isPersistent")
+	if isPersistent == 1 {
+		servers.InitPers()
+	}
+
 	//是否以集群方式部署
 	isCluster := viper.GetInt("server.isCluster")
 	if isCluster == 1 {

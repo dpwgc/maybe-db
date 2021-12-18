@@ -1,4 +1,4 @@
-package clientConn
+package clientConns
 
 import (
 	"MaybeDB/cluster"

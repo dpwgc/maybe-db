@@ -9,16 +9,21 @@ import (
  */
 
 func init() {
-	CopyMap = make(map[string]interface{})
+	SyncCopyMap = make(map[string]interface{})
 }
 
 //使用sync.Map存放数据
 var DataMap sync.Map
 
 //主从复制时使用（cluster/sync.go）
-var CopyMap map[string]interface{}
-var ByteCopyMap []byte
-var JsonCopyMap string
+var SyncCopyMap map[string]interface{}
+var SyncCopyByte []byte
+var SyncCopyJson string
+
+//持久化时使用（servers/persServer.go）
+var PersCopyMap map[string]interface{}
+var PersCopyByte []byte
+var PersCopyJson string
 
 //数据模板
 type Data struct {
