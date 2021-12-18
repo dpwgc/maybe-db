@@ -1,4 +1,4 @@
-package recovery
+package diskStorage
 
 import (
 	"MaybeDB/servers"

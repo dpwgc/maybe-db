@@ -1,4 +1,4 @@
-package recovery
+package diskStorage
 
 import (
 	"MaybeDB/servers"
@@ -13,6 +13,16 @@ import (
 
 func PersInit() {
 
+	//是否以集群方式部署
+	isCluster := viper.GetInt("server.isCluster")
+	//是否是主节点
+	isMaster := viper.GetInt("server.isMaster")
+
+	//集群模式下，从节点会自动同步主节点数据，无需进行数据持久化
+	if isCluster == 1 || isMaster == 0 {
+		return
+	}
+
 	//两次持久化操作的间隔时间
 	persistentTime := viper.GetInt("db.persistentTime")
 
@@ -20,7 +30,7 @@ func PersInit() {
 		for {
 			//复制本地数据
 			copyDataMap()
-			//持久化
+			//持久化写入
 			Write()
 			time.Sleep(time.Second * time.Duration(persistentTime))
 		}

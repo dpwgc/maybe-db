@@ -1,4 +1,4 @@
-package recovery
+package diskStorage
 
 import (
 	"MaybeDB/cluster"
@@ -23,19 +23,26 @@ func RecoveryInit() {
 	// 数据恢复策略
 	recoveryStrategy := viper.GetInt("db.recoveryStrategy")
 
+	//集群模式下，从节点会自动同步主节点数据，无需进行数据恢复操作
+	if isCluster == 1 || isMaster == 0 {
+		return
+	}
+
 	//从本地持久化文件中获取数据
 	if recoveryStrategy == 1 {
 		//本地恢复数据
-		fmt.Println("recovery from local")
+		fmt.Println("diskStorage from local")
 		recoveryFromLocal()
 	}
 
 	//从集群其他健康的主节点获取数据
 	if recoveryStrategy == 2 && isCluster == 1 && isMaster == 1 {
 		//云端恢复数据
-		fmt.Println("recovery from cluster")
+		fmt.Println("diskStorage from cluster")
 		recoveryFromCluster()
 	}
+
+	//recoveryStrategy为其他数值时不进行数据恢复操作
 }
 
 //从主节点集群中获取数据进行恢复工作

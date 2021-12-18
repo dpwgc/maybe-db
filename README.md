@@ -10,13 +10,15 @@
 
 * 主从节点读写分离：主节点负责插入/删除数据，从节点负责查询数据。
 
-* 高可用：支持一主多从集群部署或多主多从集群部署。
+* 高可用：支持一主多从集群部署或多主多从集群部署，单个主节点宕机重启后，可拉取其他健康的主节点的数据或从本地持久化文件中提取数据来进行数据恢复。
 
 * 主节点之间数据同步：在任意一个主节点进行数据插入/删除操作，该操作都会扩散同步到其他主节点。
 
 * 主从节点数据同步：将主节点数据定期更新Nacos的Matedata元数据空间，从节点从Nacos上获取主节点的元数据，将元数据中的map解析并覆盖本地数据。
 
 ### 单机实现功能
+
+* 数据持久化与重启数据恢复
 
 * 插入数据（value的类型：支持string、int64、map、int类型数组）
 
@@ -64,6 +66,14 @@
 
 * config.go `项目配置文件加载`
 
+##### diskStorage 持久化到硬盘
+
+* fileRW `文件读写操作`
+
+* persistent `数据持久化`
+
+* recovery `数据恢复`
+
 ##### middlewares 中间件
 
 * safeMiddleware `访问密钥验证`
@@ -77,6 +87,12 @@
 * clearServer `实时清理过期数据`
 
 * dataServer `数据存储`
+
+##### utils 工具类
+
+* httpUtil.go `http请求工具`
+
+* jsonUtil `Json字符串转换工具`
 
 ##### main.go 主函数
 
@@ -135,6 +151,7 @@ Windows
         application.yaml  # 配置文件
     /cache                # Nacos缓存目录
     /log                  # Nacos日志目录
+    DataMap.csv           # 持久化文件
     
 Linux
 /maybe-db                 # 应用文件根目录
@@ -143,6 +160,7 @@ Linux
         application.yaml  # 配置文件
     /cache                # Nacos缓存目录
     /log                  # Nacos日志目录
+    DataMap.csv           # 持久化文件
 ```
 
 ##### 单机部署
@@ -154,4 +172,17 @@ Linux
 isCluster: 0
 # 是否为主节点（1:是，0:否）
 isMaster: 1
+```
+
+##### 数据持久化
+
+* 集群模式下，从节点会自动同步主节点数据，无需进行数据持久化/数据恢复
+
+```
+# 是否开启持久化（1:是，0:否）
+isPersistent: 1
+# 数据持久化操作的时间间隔（单位：秒）
+persistentTime: 5
+# 持久化文件保存路径
+persistentPath: ./DataMap.csv
 ```

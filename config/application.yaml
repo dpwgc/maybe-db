@@ -32,9 +32,9 @@ nacos:
 db:
   # 访问密钥（放在请求头部）
   secretKey: test_secret_key
-  # 是否开启持久化
+  # 是否开启持久化（1:是，0:否）
   isPersistent: 1
-  # 持久化数据的时间间隔（单位：秒）
+  # 数据持久化操作的时间间隔（单位：秒）
   persistentTime: 5
   # 持久化文件保存路径
   persistentPath: ./DataMap.csv

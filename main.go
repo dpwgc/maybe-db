@@ -3,7 +3,7 @@ package main
 import (
 	"MaybeDB/cluster"
 	"MaybeDB/config"
-	"MaybeDB/recovery"
+	"MaybeDB/diskStorage"
 	"MaybeDB/routers"
 	"MaybeDB/servers"
 	_ "fmt"
@@ -22,12 +22,12 @@ func main() {
 	config.ConfigInit()
 
 	//数据恢复
-	recovery.RecoveryInit()
+	diskStorage.RecoveryInit()
 
 	//是否开启持久化
 	isPersistent := viper.GetInt("db.isPersistent")
 	if isPersistent == 1 {
-		recovery.PersInit()
+		diskStorage.PersInit()
 	}
 
 	//是否以集群方式部署
