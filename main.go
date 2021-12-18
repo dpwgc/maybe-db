@@ -24,9 +24,6 @@ func main() {
 	//加载文件操作模块
 	diskStorage.FileInit()
 
-	//加载数据恢复模块
-	diskStorage.RecoveryInit()
-
 	//是否开启持久化
 	isPersistent := viper.GetInt("db.isPersistent")
 	if isPersistent == 1 {
@@ -39,6 +36,9 @@ func main() {
 		cluster.NacosInit()
 		cluster.SyncInit()
 	}
+
+	//加载数据恢复模块
+	diskStorage.RecoveryInit()
 
 	//初始化清理模块
 	servers.ClearInit()
