@@ -19,7 +19,7 @@ func PersInit() {
 	isMaster := viper.GetInt("server.isMaster")
 
 	//集群模式下，从节点会自动同步主节点数据，无需进行数据持久化
-	if isCluster == 1 || isMaster == 0 {
+	if isCluster == 1 && isMaster == 0 {
 		return
 	}
 

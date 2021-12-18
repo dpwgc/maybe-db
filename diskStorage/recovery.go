@@ -24,7 +24,7 @@ func RecoveryInit() {
 	recoveryStrategy := viper.GetInt("db.recoveryStrategy")
 
 	//集群模式下，从节点会自动同步主节点数据，无需进行数据恢复操作
-	if isCluster == 1 || isMaster == 0 {
+	if isCluster == 1 && isMaster == 0 {
 		return
 	}
 
