@@ -5,6 +5,10 @@ import (
 	"encoding/json"
 )
 
+/*
+ * JSON格式转换工具
+ */
+
 //json字符串转map
 func JsonToMap(jsonStr string) (map[string]interface{}, error) {
 	m := make(map[string]interface{})

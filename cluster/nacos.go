@@ -9,19 +9,21 @@ import (
 	"github.com/spf13/viper"
 )
 
-var namingClient naming_client.INamingClient
+var NamingClient naming_client.INamingClient
 
 func NacosInit() {
 
 	clientConfig := constant.ClientConfig{
 		NamespaceId:         "maybe-db",
-		TimeoutMs:           5000,
-		NotLoadCacheAtStart: true,
-		LogDir:              viper.GetString("nacos.logDir"),   // 日志存储路径
-		CacheDir:            viper.GetString("nacos.cacheDir"), // 缓存service信息的目录
-		RotateTime:          "1h",
-		MaxAge:              3,
-		LogLevel:            "debug",
+		TimeoutMs:           viper.GetUint64("nacos.TimeoutMs"),         //连接超时时间
+		NotLoadCacheAtStart: viper.GetBool("nacos.notLoadCacheAtStart"), //账户
+		LogDir:              viper.GetString("nacos.logDir"),            //日志存储路径
+		CacheDir:            viper.GetString("nacos.cacheDir"),          //缓存service信息的目录
+		RotateTime:          viper.GetString("nacos.rotateTime"),        //日志轮转周期
+		MaxAge:              viper.GetInt64("nacos.maxAge"),             //日志最大文件数
+		LogLevel:            viper.GetString("nacos.logLevel"),          //日志级别
+		Username:            viper.GetString("nacos.username"),          //账户
+		Password:            viper.GetString("nacos.password"),          //密码
 	}
 
 	//nacos注册中心地址配置
@@ -29,13 +31,13 @@ func NacosInit() {
 		{
 			IpAddr:      viper.GetString("nacos.ipAddr"), //nacos注册中心的ip
 			ContextPath: viper.GetString("nacos.contextPath"),
-			Port:        uint64(viper.GetInt("nacos.port")),
+			Port:        viper.GetUint64("nacos.port"),
 			Scheme:      viper.GetString("nacos.scheme"),
 		},
 	}
 
 	// 将服务注册到nacos
-	namingClient, _ = clients.NewNamingClient(
+	NamingClient, _ = clients.NewNamingClient(
 		vo.NacosClientParam{
 			ClientConfig:  &clientConfig,
 			ServerConfigs: serverConfigs,
@@ -64,7 +66,7 @@ func NacosInit() {
 	}
 
 	//向Nacos注册服务
-	namingClient.RegisterInstance(vo.RegisterInstanceParam{
+	NamingClient.RegisterInstance(vo.RegisterInstanceParam{
 		Ip:          viper.GetString("server.ip"),
 		Port:        uint64(viper.GetInt("server.port")),
 		ServiceName: serviceName,
@@ -73,7 +75,7 @@ func NacosInit() {
 		Healthy:     true,
 		Ephemeral:   true,
 		Metadata:    matedata,
-		ClusterName: "MAYBE_DB",
+		ClusterName: "MAYBE_DB_CLUSTER",
 		GroupName:   "MAYBE_DB_GROUP",
 	})
 }

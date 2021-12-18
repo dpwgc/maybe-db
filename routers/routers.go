@@ -23,18 +23,18 @@ func SetupRouters() (r *gin.Engine) {
 	conn.Use(middlewares.SafeMiddleWare)
 	{
 		conn.POST("/Set", clientConn.Set)
-		conn.POST("/Get", clientConn.Get)
-		conn.POST("/Del", clientConn.Del)
+		conn.GET("/Get", clientConn.Get)
+		conn.DELETE("/Del", clientConn.Del)
 
-		conn.POST("/List", clientConn.List)
-		conn.POST("/ListByKeyword", clientConn.ListByKeyword)
-		conn.POST("/ListByPrefix", clientConn.ListByPrefix)
+		conn.GET("/List", clientConn.List)
+		conn.GET("/ListByKeyword", clientConn.ListByKeyword)
+		conn.GET("/ListByPrefix", clientConn.ListByPrefix)
 
-		conn.POST("/DetailGet", clientConn.DetailGet)
-		conn.POST("/DetailList", clientConn.DetailList)
-		conn.POST("/DetailListByKeyword", clientConn.DetailListByKeyword)
-		conn.POST("/DetailListByPrefix", clientConn.DetailListByPrefix)
-		conn.POST("/Count", clientConn.Count)
+		conn.GET("/DetailGet", clientConn.DetailGet)
+		conn.GET("/DetailList", clientConn.DetailList)
+		conn.GET("/DetailListByKeyword", clientConn.DetailListByKeyword)
+		conn.GET("/DetailListByPrefix", clientConn.DetailListByPrefix)
+		conn.GET("/Count", clientConn.Count)
 	}
 	return
 }

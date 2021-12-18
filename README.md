@@ -1,6 +1,6 @@
 # MaybeDB
 
-## 基于Golang Gin整合Nacos的分布式key-value内存型数据库
+## 基于Golang整合Nacos的分布式键值型内存数据库
 
 `Golang` `Gin` `Nacos` `sync.Map`
 
@@ -8,7 +8,13 @@
 
 ### 集群实现功能
 
-* 主从节点数据同步功能：将主节点数据定期更新Nacos的Matedata元数据空间，从节点从Nacos上获取主节点的元数据，将元数据中的map解析并覆盖本地数据。
+* 主从节点读写分离：主节点负责插入/删除数据，从节点负责查询数据。
+
+* 高可用：支持一主多从集群部署或多主多从集群部署。
+
+* 主节点之间数据同步：在任意一个主节点进行数据插入/删除操作，该操作都会扩散同步到其他主节点。
+
+* 主从节点数据同步：将主节点数据定期更新Nacos的Matedata元数据空间，从节点从Nacos上获取主节点的元数据，将元数据中的map解析并覆盖本地数据。
 
 ### 单机实现功能
 
@@ -46,7 +52,9 @@
 
 ##### cluster 集群相关
 
-* dataSync `主从数据同步`
+* sync `主从节点数据同步`
+
+* recovery `主节点数据恢复`
 
 * nacos `Nacos注册中心连接`
 
@@ -74,7 +82,7 @@
 
 ***
 
-### 使用说明
+### 打包方式
 
 * 填写application.yaml内的配置。
 
@@ -97,21 +105,23 @@ go build main.go
 
 ***
 
-### 部署方式
+### 部署说明
 
 ##### 集群部署
 
 * 在一台服务器上部署Nacos，添加命名空间(命名空间Id及命名空间名称设置为：maybe-db),填写各节点application.yaml配置文件中的Nacos配置信息。
 
-* 采用一主多从方式部署项目,主节点写数据，从节点读数据。
+* 采用一主多从/多主多从方式部署项目,主节点写数据，从节点读数据。
 
 * application.yaml主从节点配置
 
 ```
 # 主节点配置
+isCluster: 1
 isMaster: 1
 
 # 从节点配置
+isCluster: 1
 isMaster: 0
 ```
 
@@ -119,16 +129,20 @@ isMaster: 0
 
 ```
 Windows
-/上传文件目录
-    main.exe  # 打包后的文件
-    /config   # 配置目录
-        application.yaml    # 配置文件
+/maybe-db                 # 应用文件根目录
+    main.exe              # 打包后的exe文件
+    /config               # 配置目录
+        application.yaml  # 配置文件
+    /cache                # Nacos缓存目录
+    /log                  # Nacos日志目录
     
 Linux
-/上传文件目录
-    main      # 打包后的文件
-    /config   # 配置目录
-        application.yaml    # 配置文件
+/maybe-db                 # 应用文件根目录
+    main                  # 打包后的二进制文件(程序后台执行:setsid ./main)
+    /config               # 配置目录
+        application.yaml  # 配置文件
+    /cache                # Nacos缓存目录
+    /log                  # Nacos日志目录
 ```
 
 ##### 单机部署
@@ -138,4 +152,6 @@ Linux
 ```
 # 是否以集群方式部署（1:是，0:否）
 isCluster: 0
+# 是否为主节点（1:是，0:否）
+isMaster: 1
 ```

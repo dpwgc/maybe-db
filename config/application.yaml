@@ -1,8 +1,7 @@
 # 服务配置
 server:
-  # 本地ip
+  # 服务器公网ip
   ip: 127.0.0.1
-  # 本地端口
   port: 8012
   # 节点之间数据同步的时间间隔（单位：秒）
   syncTime: 2
@@ -18,10 +17,16 @@ nacos:
   contextPath: /nacos
   port: 8848
   scheme: http
-  # 日志存储路径
+  timeoutMs: 3000
+  notLoadCacheAtStart: true
+  rotateTime: 24h
+  maxAge: 4
+  logLevel: debug
   logDir: log
-  # 缓存service信息的目录
   cacheDir: cache
+  # Nacos的账户和密码（Nacos开启密码验证的情况下使用）
+  username: nacos
+  password: nacos
 
 # 数据库配置
 db:
