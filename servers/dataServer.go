@@ -10,6 +10,7 @@ import (
 
 func init() {
 	SyncCopyMap = make(map[string]interface{})
+	PersCopyMap = make(map[string]interface{})
 }
 
 //使用sync.Map存放数据
@@ -20,7 +21,7 @@ var SyncCopyMap map[string]interface{}
 var SyncCopyByte []byte
 var SyncCopyJson string
 
-//持久化时使用（servers/persServer.go）
+//持久化时使用（servers/persistent.go）
 var PersCopyMap map[string]interface{}
 var PersCopyByte []byte
 var PersCopyJson string

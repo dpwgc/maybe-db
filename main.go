@@ -27,7 +27,7 @@ func main() {
 	//是否开启持久化
 	isPersistent := viper.GetInt("db.isPersistent")
 	if isPersistent == 1 {
-		servers.PersInit()
+		recovery.PersInit()
 	}
 
 	//是否以集群方式部署

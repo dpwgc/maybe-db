@@ -35,6 +35,8 @@ db:
   # 是否开启持久化
   isPersistent: 1
   # 持久化数据的时间间隔（单位：秒）
-  persistentTime: 2
+  persistentTime: 5
+  # 持久化文件保存路径
+  persistentPath: ./DataMap.csv
   # 数据恢复策略（0:不进行数据恢复，1:从本地持久化文件中获取数据，2:从集群其他健康的主节点获取数据）
   recoveryStrategy: 1
