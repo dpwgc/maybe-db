@@ -44,7 +44,6 @@ func NacosInit() {
 		},
 	)
 
-	var matedata map[string]string
 	var serviceName string
 	//判断是否为主节点
 	isMaster := viper.GetInt("server.isMaster")
@@ -62,7 +61,7 @@ func NacosInit() {
 	}
 
 	//将配置信息上传到元数据空间
-	matedata = map[string]string{"Config": utils.MapToJson(viper.AllSettings())}
+	matedata := map[string]string{"Config": utils.MapToJson(viper.AllSettings())}
 
 	//向Nacos注册服务
 	NamingClient.RegisterInstance(vo.RegisterInstanceParam{

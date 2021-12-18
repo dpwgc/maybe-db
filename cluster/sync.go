@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/nacos-group/nacos-sdk-go/vo"
 	"github.com/spf13/viper"
+	"net/http"
 	"strconv"
 	"time"
 )
@@ -56,10 +57,7 @@ func GetMasterData(c *gin.Context) {
 	//以Json字符串形式返回主节点的全部数据
 	res := servers.SyncCopyJson
 
-	c.JSON(0, gin.H{
-		"code": 0,
-		"data": res,
-	})
+	c.String(http.StatusOK, fmt.Sprintln(res))
 }
 
 //复制该主节点的本地数据
@@ -81,41 +79,48 @@ func copyDataMap() {
 //从节点请求获取主节点的数据，并同步更新本地DataMap
 func syncWithMaster() {
 
-	//获取一个健康的主节点实例
-	instance, err := NamingClient.SelectOneHealthyInstance(vo.SelectOneHealthInstanceParam{
+	// SelectInstances 只返回满足这些条件的实例列表：healthy=${HealthyOnly},enable=true 和weight>0
+	instances, err := NamingClient.SelectInstances(vo.SelectInstancesParam{
 		ServiceName: "maybe-db-master",
-		GroupName:   "MAYBE_DB_GROUP",
-		Clusters:    []string{"MAYBE_DB_CLUSTER"},
+		GroupName:   "MAYBE_DB_GROUP",             // 默认值DEFAULT_GROUP
+		Clusters:    []string{"MAYBE_DB_CLUSTER"}, // 默认值DEFAULT
+		HealthyOnly: true,
 	})
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	//设置请求头
-	header := make(map[string]string, 1)
-	//访问密钥
-	header["secretKey"] = viper.GetString("db.secretKey")
+	//遍历实例列表，找到一个健康的实例，向其发出同步请求
+	for _, instance := range instances {
+		//如果是自己，跳过
+		if instance.Ip == viper.GetString("server.ip") && instance.Port == viper.GetUint64("server.port") {
+			continue
+		}
+		//设置请求头
+		header := make(map[string]string, 1)
+		//访问密钥
+		header["secretKey"] = viper.GetString("db.secretKey")
 
-	//向该主节点请求数据
-	url := fmt.Sprintf("%s%s%s%s%s", "http://", instance.Ip, ":", strconv.Itoa(int(instance.Port)), "/Sync/GetMasterData")
-	resStr, err := utils.Get(url, header)
+		//向该主节点请求数据
+		url := fmt.Sprintf("%s%s%s%s%s", "http://", instance.Ip, ":", strconv.Itoa(int(instance.Port)), "/Sync/GetMasterData")
+		res, err := utils.Get(url, header)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
-	var res string
-	err = json.Unmarshal([]byte(resStr), &res)
-	if err != nil {
-		fmt.Println(err)
-	}
+		//解析数据到masterMap集合
+		masterMap, err := utils.JsonToData(res)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
-	//解析数据到masterMap集合
-	masterMap, err := utils.JsonToData(res)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	//将主节点map内的数据（masterMap）循环写入从节点map（DataMap）
-	for key, value := range masterMap {
-		servers.DataMap.Store(key, value)
+		//将主节点map内的数据（masterMap）循环写入从节点map（DataMap）
+		for key, value := range masterMap {
+			servers.DataMap.Store(key, value)
+		}
+		break
 	}
 }
