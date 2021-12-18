@@ -1,7 +1,7 @@
 package cluster
 
 import (
-	"MaybeDB/servers"
+	"MaybeDB/utils"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/clients/naming_client"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
@@ -53,17 +53,16 @@ func NacosInit() {
 	if isMaster == 1 {
 		//将主节点ServiceName标记为maybe-db-master
 		serviceName = "maybe-db-master"
-		//将DataMap数据同步到nacos元数据
-		matedata = map[string]string{"DataMap": servers.SyncCopyJson}
 	}
 
 	//如果该节点是从节点
 	if isMaster == 0 {
 		//将从节点ServiceName标记为maybe-db-slave
 		serviceName = "maybe-db-slave"
-		//从节点不对nacos元数据进行任何处理
-		matedata = map[string]string{"Slave Node": "200"}
 	}
+
+	//将配置信息上传到元数据空间
+	matedata = map[string]string{"Config": utils.MapToJson(viper.AllSettings())}
 
 	//向Nacos注册服务
 	NamingClient.RegisterInstance(vo.RegisterInstanceParam{

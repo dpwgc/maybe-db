@@ -28,3 +28,10 @@ func JsonToData(jsonStr string) (map[string]servers.Data, error) {
 	}
 	return m, nil
 }
+
+//map转json字符串
+func MapToJson(param map[string]interface{}) string {
+	dataType, _ := json.Marshal(param)
+	dataString := string(dataType)
+	return dataString
+}

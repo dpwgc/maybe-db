@@ -16,17 +16,12 @@ import (
  * 主从节点数据同步
  */
 
-var ip string
-var port uint64
-
 //主从节点之间的数据同步
 func SyncInit() {
 
 	//加载配置信息
 	syncTime := viper.GetInt("server.syncTime")
 	isMaster := viper.GetInt("server.isMaster")
-	ip = viper.GetString("server.ip")
-	port = viper.GetUint64("server.port")
 
 	//开启主从同步协程
 	go func() {
