@@ -8,7 +8,7 @@ import (
  * 过期数据清理
  */
 
-func InitClear() {
+func ClearInit() {
 	go func() {
 		for {
 			time.Sleep(time.Second * 1)

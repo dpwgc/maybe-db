@@ -4,7 +4,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func InitConfig() {
+func ConfigInit() {
 	viper.AddConfigPath("./config")
 	viper.SetConfigFile("application") // 指定配置文件路径
 	viper.SetConfigName("application") //配置文件名

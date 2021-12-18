@@ -11,7 +11,7 @@ import (
  * 持久化数据
  */
 
-func InitPers() {
+func PersInit() {
 
 	//两次持久化操作的间隔时间
 	persistentTime := viper.GetInt("db.persistentTime")

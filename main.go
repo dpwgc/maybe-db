@@ -18,12 +18,12 @@ import (
 func main() {
 
 	//加载配置
-	config.InitConfig()
+	config.ConfigInit()
 
 	//是否开启持久化
 	isPersistent := viper.GetInt("db.isPersistent")
 	if isPersistent == 1 {
-		servers.InitPers()
+		servers.PersInit()
 	}
 
 	//是否以集群方式部署
@@ -34,7 +34,7 @@ func main() {
 	}
 
 	//初始化清理模块
-	servers.InitClear()
+	servers.ClearInit()
 
 	//设置路由
 	r := routers.SetupRouters()
