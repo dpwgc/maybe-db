@@ -1,6 +1,7 @@
 package config
 
 import (
+	"MaybeDB/servers"
 	"github.com/spf13/viper"
 )
 
@@ -11,6 +12,7 @@ func ConfigInit() {
 	viper.SetConfigType("yaml")        //配置文件类型
 	err := viper.ReadInConfig()
 	if err != nil {
+		servers.Loger.Println(err)
 		panic(err)
 	}
 }

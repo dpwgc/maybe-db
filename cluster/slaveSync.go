@@ -23,7 +23,7 @@ func syncWithMaster() {
 		Clusters:    []string{"MAYBE_DB_CLUSTER"},
 	})
 	if err != nil {
-		fmt.Println(err)
+		servers.Loger.Println(err)
 		return
 	}
 
@@ -36,14 +36,14 @@ func syncWithMaster() {
 	url := fmt.Sprintf("%s%s%s%s%s", "http://", instance.Ip, ":", strconv.Itoa(int(instance.Port)), "/Sync/GetMasterData")
 	res, err := utils.Get(url, header)
 	if err != nil {
-		fmt.Println(err)
+		servers.Loger.Println(err)
 		return
 	}
 
 	//解析数据到masterMap集合
 	masterMap, err := utils.JsonToData(res)
 	if err != nil {
-		fmt.Println(err)
+		servers.Loger.Println(err)
 		return
 	}
 

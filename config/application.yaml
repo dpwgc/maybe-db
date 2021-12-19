@@ -24,8 +24,6 @@ nacos:
   rotateTime: 24h
   maxAge: 4
   logLevel: debug
-  logDir: log
-  cacheDir: cache
   # Nacos的账户和密码（Nacos开启密码验证的情况下使用）
   username: nacos
   password: nacos

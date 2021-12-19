@@ -1,8 +1,8 @@
 package utils
 
 import (
+	"MaybeDB/servers"
 	"io"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -20,10 +20,10 @@ func init() {
 }
 
 func Get(uri string, header map[string]string) (string, error) {
-	log.SetFlags(log.Lshortfile | log.LstdFlags)
+
 	request, err := http.NewRequest("GET", uri, nil)
 	if err != nil {
-		log.Println(err)
+		servers.Loger.Println(err)
 		return "", err
 	}
 	if len(header) > 0 {
@@ -33,13 +33,13 @@ func Get(uri string, header map[string]string) (string, error) {
 	}
 	response, err := HttpClient.Do(request)
 	if err != nil {
-		log.Println(err)
+		servers.Loger.Println(err)
 		return "", err
 	}
 	defer response.Body.Close()
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
-		log.Println(err)
+		servers.Loger.Println(err)
 		return "", err
 	}
 	return string(body), nil
@@ -56,7 +56,7 @@ func PostForm(uri string, header map[string]string, data map[string]string) (str
 
 	request, err := http.NewRequest("POST", uri, strings.NewReader(formData.Encode()))
 	if err != nil {
-		log.Println(err)
+		servers.Loger.Println(err)
 		return "", err
 	}
 
@@ -72,7 +72,7 @@ func PostForm(uri string, header map[string]string, data map[string]string) (str
 
 	response, err := HttpClient.Do(request)
 	if err != nil {
-		log.Println(err)
+		servers.Loger.Println(err)
 		return "", err
 	}
 
@@ -80,7 +80,7 @@ func PostForm(uri string, header map[string]string, data map[string]string) (str
 
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
-		log.Println(err)
+		servers.Loger.Println(err)
 		return "", err
 	}
 

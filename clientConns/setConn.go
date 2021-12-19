@@ -180,7 +180,7 @@ func masterSetSync(key string, value string, valueType string, expireTime string
 		res := make(map[string]interface{})
 		err = json.Unmarshal([]byte(resStr), &res)
 		if err != nil {
-			fmt.Println(err)
+			servers.Loger.Println(err)
 		}
 	}
 }

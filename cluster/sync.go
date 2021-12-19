@@ -1,6 +1,7 @@
 package cluster
 
 import (
+	"MaybeDB/servers"
 	"github.com/spf13/viper"
 	"time"
 )
@@ -20,6 +21,7 @@ func SyncInit() {
 	go func() {
 		//如果该节点是主节点
 		if isMaster == 1 {
+			servers.Loger.Println("Master starts synchronization")
 			for {
 				//定时复制本地DataMap
 				copyDataMap()
@@ -30,6 +32,7 @@ func SyncInit() {
 		//如果该节点是从节点
 		if isMaster == 0 {
 			for {
+				servers.Loger.Println("Slave starts synchronization")
 				//从节点定时请求获取主节点的数据，并同步更新本地DataMap
 				syncWithMaster()
 				time.Sleep(time.Second * time.Duration(syncTime))

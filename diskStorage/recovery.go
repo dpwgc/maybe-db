@@ -32,14 +32,14 @@ func RecoveryInit() {
 	//从本地持久化文件中获取数据
 	if recoveryStrategy == 1 {
 		//本地恢复数据
-		fmt.Println("diskStorage from local")
+		servers.Loger.Println("Recovery from local")
 		recoveryFromLocal()
 	}
 
 	//从集群其他健康的主节点获取数据
 	if recoveryStrategy == 2 && isCluster == 1 && isMaster == 1 {
 		//云端恢复数据
-		fmt.Println("diskStorage from cluster")
+		servers.Loger.Println("Recovery from cluster")
 		recoveryFromCluster()
 	}
 
@@ -57,7 +57,7 @@ func recoveryFromCluster() {
 		HealthyOnly: true,
 	})
 	if err != nil {
-		fmt.Println(err)
+		servers.Loger.Println(err)
 		return
 	}
 
@@ -76,15 +76,15 @@ func recoveryFromCluster() {
 		url := fmt.Sprintf("%s%s%s%s%s", "http://", instance.Ip, ":", strconv.Itoa(int(instance.Port)), "/Sync/GetMasterData")
 		res, err := utils.Get(url, header)
 		if err != nil {
-			fmt.Println(err)
-			return
+			servers.Loger.Println(err)
+			continue
 		}
 
 		//解析数据到masterMap集合
 		masterMap, err := utils.JsonToData(res)
 		if err != nil {
-			fmt.Println(err)
-			return
+			servers.Loger.Println(err)
+			continue
 		}
 
 		//将主节点map内的数据（masterMap）循环写入从节点map（DataMap）

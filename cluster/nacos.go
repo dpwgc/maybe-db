@@ -1,6 +1,7 @@
 package cluster
 
 import (
+	"MaybeDB/servers"
 	"MaybeDB/utils"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/clients/naming_client"
@@ -17,8 +18,8 @@ func NacosInit() {
 		NamespaceId:         viper.GetString("nacos.namespaceId"),
 		TimeoutMs:           viper.GetUint64("nacos.TimeoutMs"),         //连接超时时间
 		NotLoadCacheAtStart: viper.GetBool("nacos.notLoadCacheAtStart"), //账户
-		LogDir:              viper.GetString("nacos.logDir"),            //日志存储路径
-		CacheDir:            viper.GetString("nacos.cacheDir"),          //缓存service信息的目录
+		LogDir:              "log",                                      //日志存储路径
+		CacheDir:            "cache",                                    //缓存service信息的目录
 		RotateTime:          viper.GetString("nacos.rotateTime"),        //日志轮转周期
 		MaxAge:              viper.GetInt64("nacos.maxAge"),             //日志最大文件数
 		LogLevel:            viper.GetString("nacos.logLevel"),          //日志级别
@@ -64,7 +65,7 @@ func NacosInit() {
 	matedata := map[string]string{"Config": utils.MapToJson(viper.AllSettings())}
 
 	//向Nacos注册服务
-	NamingClient.RegisterInstance(vo.RegisterInstanceParam{
+	_, err := NamingClient.RegisterInstance(vo.RegisterInstanceParam{
 		Ip:          viper.GetString("server.ip"),
 		Port:        uint64(viper.GetInt("server.port")),
 		ServiceName: serviceName,
@@ -76,4 +77,8 @@ func NacosInit() {
 		ClusterName: "MAYBE_DB_CLUSTER",
 		GroupName:   "MAYBE_DB_GROUP",
 	})
+	if err != nil {
+		servers.Loger.Println(err)
+		return
+	}
 }

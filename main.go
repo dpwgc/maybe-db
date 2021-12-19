@@ -21,6 +21,9 @@ func main() {
 	//加载配置文件
 	config.ConfigInit()
 
+	//加载日志记录模块
+	servers.LogInit()
+
 	//加载文件操作模块
 	diskStorage.FileInit()
 

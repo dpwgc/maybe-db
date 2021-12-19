@@ -27,6 +27,7 @@ func PersInit() {
 	persistentTime := viper.GetInt("db.persistentTime")
 
 	go func() {
+		servers.Loger.Println("Start persistence")
 		for {
 			//复制本地数据
 			copyDataMap()
