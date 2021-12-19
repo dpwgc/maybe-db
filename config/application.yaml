@@ -12,7 +12,7 @@ server:
 
 # nacos注册中心配置
 nacos:
-  # 集群命名空间Id（）
+  # 集群命名空间Id（通过namespaceId来区分多个不同的集群）
   namespaceId: maybe-db
   timeoutMs: 3000
   # 其他配置
