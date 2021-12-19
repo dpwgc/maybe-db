@@ -37,7 +37,10 @@ func Write() {
 	wFile, err = os.OpenFile(path, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0777)
 
 	writer := csv.NewWriter(wFile)
-	err = writer.Write([]string{servers.PersCopyJson})
+
+	//将数据以json字符串形式存入持久化文件
+	jsonStr := string(servers.PersCopyByte)
+	err = writer.Write([]string{jsonStr})
 	if err != nil {
 		fmt.Print("Write:")
 		fmt.Println(err)

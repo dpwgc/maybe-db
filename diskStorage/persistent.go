@@ -39,12 +39,13 @@ func PersInit() {
 
 //复制该主节点的数据
 func copyDataMap() {
+
+	copyMap := make(map[string]interface{})
+
 	servers.DataMap.Range(func(key, value interface{}) bool {
-		servers.PersCopyMap[key.(string)] = value
+		copyMap[key.(string)] = value
 		return true
 	})
 	//将PersCopyMap转为字节数组类型PersCopyByte
-	servers.PersCopyByte, _ = json.Marshal(servers.PersCopyMap)
-	//将PersCopyByte转为Json字符串类型
-	servers.PersCopyJson = string(servers.PersCopyByte)
+	servers.PersCopyByte, _ = json.Marshal(copyMap)
 }

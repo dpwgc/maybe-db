@@ -44,21 +44,23 @@
 
 ##### clientConn 客户端连接操作
 
-* setConn `存储数据相关操作`
+* setConn.go `存储数据相关操作`
 
-* getConn `获取数据相关操作`
+* getConn.go `获取数据相关操作`
 
-* delConn `删除数据相关`
+* delConn.go `删除数据相关`
 
-* detailConn `获取数据详情相关操作`
+* detailConn.go `获取数据详情相关操作`
 
 ##### cluster 集群相关
 
-* sync `主从节点数据同步`
+* sync.go `主从节点数据同步协程`
 
-* recovery `主节点数据恢复`
+* masterSync.go `主节点同步相关操作`
 
-* nacos `Nacos注册中心连接`
+* slaveSync.go `从节点同步相关操作`
+
+* nacos.go `Nacos注册中心连接`
 
 ##### config 配置类
 
@@ -68,15 +70,15 @@
 
 ##### diskStorage 持久化到硬盘
 
-* fileRW `文件读写操作`
+* fileRW.go `文件读写操作`
 
-* persistent `数据持久化`
+* persistent.go `数据持久化`
 
-* recovery `数据恢复`
+* recovery.go `数据恢复`
 
 ##### middlewares 中间件
 
-* safeMiddleware `访问密钥验证`
+* safeMiddleware.go `访问密钥验证`
 
 ##### routers 路由
 
@@ -84,15 +86,15 @@
 
 ##### servers 服务层
 
-* clearServer `实时清理过期数据`
+* clearServer.go `实时清理过期数据`
 
-* dataServer `数据存储`
+* dataServer.go `内存数据存储`
 
 ##### utils 工具类
 
 * httpUtil.go `http请求工具`
 
-* jsonUtil `Json字符串转换工具`
+* jsonUtil.go `Json字符串转换工具`
 
 ##### main.go 主函数
 
@@ -105,18 +107,24 @@
 * 运行项目：
 
 ```
-GoLand直接运行main.go(调试)
+（1）GoLand直接运行main.go(调试)
+```
 
-打包成exe运行(windows部署)
-GoLand终端cd到项目根目录，执行go build main.go命令，生成main.exe文件
+```
+（2）打包成exe运行(windows部署)
 
-打包成二进制文件运行(linux部署)
-cmd终端cd到项目根目录，依次执行下列命令：
-SET CGO_ENABLED=0
-SET GOOS=linux
-SET GOARCH=amd64
-go build main.go
-生成main文件
+  GoLand终端cd到项目根目录，执行go build main.go命令，生成main.exe文件
+```
+
+```
+（3）打包成二进制文件运行(linux部署)
+
+  cmd终端cd到项目根目录，依次执行下列命令：
+  SET CGO_ENABLED=0
+  SET GOOS=linux
+  SET GOARCH=amd64
+  go build main.go
+  生成main文件
 ```
 
 ***
@@ -135,7 +143,9 @@ go build main.go
 # 主节点配置
 isCluster: 1
 isMaster: 1
+```
 
+```
 # 从节点配置
 isCluster: 1
 isMaster: 0
@@ -151,8 +161,10 @@ Windows
         application.yaml  # 配置文件
     /cache                # Nacos缓存目录
     /log                  # Nacos日志目录
-    DataMap.csv           # 持久化文件
-    
+    data.csv              # 持久化文件
+```
+
+```
 Linux
 /maybe-db                 # 应用文件根目录
     main                  # 打包后的二进制文件(程序后台执行:setsid ./main)
@@ -160,7 +172,7 @@ Linux
         application.yaml  # 配置文件
     /cache                # Nacos缓存目录
     /log                  # Nacos日志目录
-    DataMap.csv           # 持久化文件
+    data.csv              # 持久化文件
 ```
 
 ##### 单机部署
@@ -176,7 +188,7 @@ isMaster: 1
 
 ##### 数据持久化
 
-* 集群模式下，从节点会自动同步主节点数据，无需进行数据持久化/数据恢复
+* 集群模式下，只有主节点需要进行持久化操作，从节点会自动同步主节点数据，无需进行数据持久化/数据恢复
 
 ```
 # 是否开启持久化（1:是，0:否）
@@ -184,5 +196,10 @@ isPersistent: 1
 # 数据持久化操作的时间间隔（单位：秒）
 persistentTime: 5
 # 持久化文件保存路径
-persistentPath: ./DataMap.csv
+persistentPath: ./data.csv
+```
+
+```
+# 数据恢复策略（0:不进行数据恢复，1:从本地持久化文件中获取数据，2:从集群其他健康的主节点获取数据）
+recoveryStrategy: 2
 ```

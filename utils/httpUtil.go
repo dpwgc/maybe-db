@@ -1,9 +1,7 @@
 package utils
 
 import (
-	"bytes"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -83,68 +81,6 @@ func PostForm(uri string, header map[string]string, data map[string]string) (str
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		log.Println(err)
-		return "", err
-	}
-
-	return string(body), nil
-}
-
-func PostJson(uri string, header map[string]string, json string) (string, error) {
-
-	request, err := http.NewRequest("POST", uri, bytes.NewBuffer([]byte(json)))
-	if err != nil {
-		log.Println(err)
-		return "", err
-	}
-
-	_, has := header["Content-Type"]
-	if !has {
-		request.Header.Add("Content-Type", "application/json")
-	}
-	if len(header) > 0 {
-		for key, value := range header {
-			request.Header.Add(key, value)
-		}
-	}
-
-	response, err := HttpClient.Do(request)
-	if err != nil {
-		log.Println(err)
-		return "", err
-	}
-	defer response.Body.Close()
-
-	body, err := io.ReadAll(response.Body)
-	if err != nil {
-		log.Println(err)
-		return "", err
-	}
-
-	return string(body), nil
-}
-
-func HttpGet(url string, header map[string]string) (string, error) {
-
-	request, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return "", err
-	}
-
-	if len(header) > 0 {
-		for key, value := range header {
-			request.Header.Add(key, value)
-		}
-	}
-
-	response, err := HttpClient.Do(request)
-	if err != nil {
-		log.Println(err)
-		return "", err
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
 		return "", err
 	}
 

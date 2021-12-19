@@ -125,10 +125,10 @@ func Set(c *gin.Context) {
 	//插入数据
 	servers.DataMap.Store(key, data)
 
-	// isOtherMasterSet：判断该数据是否是其他主节点发来的
-	isOtherMasterSet := c.GetHeader("isOtherMasterSet")
+	// isOtherMaster：判断该数据是否是其他主节点发来的
+	isOtherMaster := c.GetHeader("isOtherMaster")
 	//如果是集群模式，且该消息不是从其他主节点发来的
-	if isCluster == 1 && isOtherMasterSet != "1" {
+	if isCluster == 1 && isOtherMaster != "1" {
 		//将该新增数据同步到其他主节点
 		masterSetSync(key, value, valueType, expireTime)
 	}
@@ -156,7 +156,7 @@ func masterSetSync(key string, value string, valueType string, expireTime string
 	//设置请求头
 	header := make(map[string]string, 2)
 	//标记，表明该请求是主节点集群同步数据，不是客户端发来的数据
-	header["isOtherMasterSet"] = "1"
+	header["isOtherMaster"] = "1"
 	//访问密钥
 	header["secretKey"] = viper.GetString("db.secretKey")
 

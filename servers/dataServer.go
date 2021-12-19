@@ -8,23 +8,14 @@ import (
  * 数据存储
  */
 
-func init() {
-	SyncCopyMap = make(map[string]interface{})
-	PersCopyMap = make(map[string]interface{})
-}
-
 //使用sync.Map存放数据
 var DataMap sync.Map
 
 //主从复制时使用（cluster/sync.go）
-var SyncCopyMap map[string]interface{}
 var SyncCopyByte []byte
-var SyncCopyJson string
 
-//持久化时使用（servers/persistent.go）
-var PersCopyMap map[string]interface{}
+//持久化时使用（diskStorage/persistent.go）
 var PersCopyByte []byte
-var PersCopyJson string
 
 //数据模板
 type Data struct {

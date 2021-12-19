@@ -4,7 +4,7 @@ server:
   ip: 127.0.0.1
   port: 8012
   # 节点之间数据同步的时间间隔（单位：秒）
-  syncTime: 2
+  syncTime: 1
   # 是否以集群方式部署（1:是，0:否）
   isCluster: 1
   # 是否为主节点（1:是，0:否）
@@ -12,6 +12,8 @@ server:
 
 # nacos注册中心配置
 nacos:
+  # 集群命名空间Id（）
+  namespaceId: maybe-db
   # Nacos所在服务器IP/域名
   ipAddr: VM-8-12-centos
   contextPath: /nacos
@@ -37,6 +39,6 @@ db:
   # 数据持久化操作的时间间隔（单位：秒）
   persistentTime: 5
   # 持久化文件保存路径
-  persistentPath: ./DataMap.csv
+  persistentPath: ./data.csv
   # 数据恢复策略（0:不进行数据恢复，1:从本地持久化文件中获取数据，2:从集群其他健康的主节点获取数据）
   recoveryStrategy: 2

@@ -14,7 +14,7 @@ var NamingClient naming_client.INamingClient
 func NacosInit() {
 
 	clientConfig := constant.ClientConfig{
-		NamespaceId:         "maybe-db",
+		NamespaceId:         viper.GetString("nacos.namespaceId"),
 		TimeoutMs:           viper.GetUint64("nacos.TimeoutMs"),         //连接超时时间
 		NotLoadCacheAtStart: viper.GetBool("nacos.notLoadCacheAtStart"), //账户
 		LogDir:              viper.GetString("nacos.logDir"),            //日志存储路径
