@@ -14,17 +14,29 @@ var NamingClient naming_client.INamingClient
 
 func NacosInit() {
 
+	//Nacos详细配置说明：https://github.com/nacos-group/nacos-sdk-go/blob/master/README_CN.md
 	clientConfig := constant.ClientConfig{
-		NamespaceId:         viper.GetString("nacos.namespaceId"),
-		TimeoutMs:           viper.GetUint64("nacos.TimeoutMs"),         //连接超时时间
-		NotLoadCacheAtStart: viper.GetBool("nacos.notLoadCacheAtStart"), //账户
-		LogDir:              "log",                                      //日志存储路径
-		CacheDir:            "cache",                                    //缓存service信息的目录
-		RotateTime:          viper.GetString("nacos.rotateTime"),        //日志轮转周期
-		MaxAge:              viper.GetInt64("nacos.maxAge"),             //日志最大文件数
-		LogLevel:            viper.GetString("nacos.logLevel"),          //日志级别
-		Username:            viper.GetString("nacos.username"),          //账户
-		Password:            viper.GetString("nacos.password"),          //密码
+		NamespaceId: viper.GetString("nacos.namespaceId"), //命名空间Id
+		TimeoutMs:   viper.GetUint64("nacos.TimeoutMs"),   //连接超时时间
+
+		Endpoint:  viper.GetString("nacos.endpoint"),
+		RegionId:  viper.GetString("nacos.regionId"),
+		AccessKey: viper.GetString("nacos.accessKey"),
+		SecretKey: viper.GetString("nacos.secretKey"),
+		OpenKMS:   viper.GetBool("nacos.openKMS"),
+
+		UpdateThreadNum:      viper.GetInt("nacos.updateThreadNum"),
+		NotLoadCacheAtStart:  viper.GetBool("nacos.notLoadCacheAtStart"),
+		UpdateCacheWhenEmpty: viper.GetBool("nacos.updateCacheWhenEmpty"),
+
+		LogDir:     "log",                               //日志存储路径
+		CacheDir:   "cache",                             //缓存service信息的目录
+		RotateTime: viper.GetString("nacos.rotateTime"), //日志轮转周期
+		MaxAge:     viper.GetInt64("nacos.maxAge"),      //日志最大文件数
+		LogLevel:   viper.GetString("nacos.logLevel"),   //日志级别
+
+		Username: viper.GetString("nacos.username"), //账户
+		Password: viper.GetString("nacos.password"), //密码
 	}
 
 	//nacos注册中心地址配置

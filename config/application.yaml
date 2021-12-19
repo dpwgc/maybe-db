@@ -14,19 +14,27 @@ server:
 nacos:
   # 集群命名空间Id（）
   namespaceId: maybe-db
+  timeoutMs: 3000
+  # 其他配置
+  endpoint:
+  regionId:
+  accessKey:
+  secretKey:
+  openKMS: false
+  updateThreadNum: 20
+  notLoadCacheAtStart: true
+  updateCacheWhenEmpty: true
   # Nacos所在服务器IP/域名
   ipAddr: VM-8-12-centos
   contextPath: /nacos
   port: 8848
   scheme: http
-  timeoutMs: 3000
-  notLoadCacheAtStart: true
   rotateTime: 24h
   maxAge: 4
   logLevel: debug
   # Nacos的账户和密码（Nacos开启密码验证的情况下使用）
-  username: nacos
-  password: nacos
+  username:
+  password:
 
 # 数据库配置
 db:

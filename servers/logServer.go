@@ -1,7 +1,6 @@
 package servers
 
 import (
-	"github.com/spf13/viper"
 	"log"
 	"os"
 	"time"
@@ -13,10 +12,7 @@ import (
 
 var Loger *log.Logger
 
-func LogInit() {
-
-	ip := viper.GetString("server.ip")
-	port := viper.GetString("server.port")
+func init() {
 
 	file := "./log/maybe-db-" + time.Now().Format("2006-01") + ".log"
 	logFile, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
@@ -27,5 +23,5 @@ func LogInit() {
 			panic(err)
 		}
 	}
-	Loger = log.New(logFile, "["+ip+":"+port+"]", log.LstdFlags|log.Lshortfile|log.LUTC) // 将文件设置为loger作为输出
+	Loger = log.New(logFile, "", log.LstdFlags|log.Lshortfile|log.LUTC) // 将文件设置为loger作为输出
 }
