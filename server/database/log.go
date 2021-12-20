@@ -1,4 +1,4 @@
-package servers
+package database
 
 import (
 	"log"
@@ -12,7 +12,7 @@ import (
 
 var Loger *log.Logger
 
-func init() {
+func LogInit() {
 
 	file := "./log/maybe-db-" + time.Now().Format("2006-01") + ".log"
 	logFile, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)

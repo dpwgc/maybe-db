@@ -1,7 +1,7 @@
 package cluster
 
 import (
-	"MaybeDB/servers"
+	"MaybeDB/server/database"
 	"MaybeDB/utils"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/clients/naming_client"
@@ -13,6 +13,12 @@ import (
 var NamingClient naming_client.INamingClient
 
 func NacosInit() {
+
+	//是否以集群方式部署
+	isCluster := viper.GetInt("server.isCluster")
+	if isCluster == 0 {
+		return
+	}
 
 	//Nacos详细配置说明：https://github.com/nacos-group/nacos-sdk-go/blob/master/README_CN.md
 	clientConfig := constant.ClientConfig{
@@ -90,7 +96,7 @@ func NacosInit() {
 		GroupName:   "MAYBE_DB_GROUP",
 	})
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return
 	}
 }

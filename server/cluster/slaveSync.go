@@ -1,7 +1,7 @@
 package cluster
 
 import (
-	"MaybeDB/servers"
+	"MaybeDB/server/database"
 	"MaybeDB/utils"
 	"fmt"
 	"github.com/nacos-group/nacos-sdk-go/vo"
@@ -23,7 +23,7 @@ func syncWithMaster() {
 		Clusters:    []string{"MAYBE_DB_CLUSTER"},
 	})
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return
 	}
 
@@ -36,19 +36,19 @@ func syncWithMaster() {
 	url := fmt.Sprintf("%s%s%s%s%s", "http://", instance.Ip, ":", strconv.Itoa(int(instance.Port)), "/Sync/GetMasterData")
 	res, err := utils.Get(url, header)
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return
 	}
 
 	//解析数据到masterMap集合
 	masterMap, err := utils.JsonToData(res)
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return
 	}
 
 	//将主节点map内的数据（masterMap）循环写入从节点map（DataMap）
 	for key, value := range masterMap {
-		servers.DataMap.Store(key, value)
+		database.DataMap.Store(key, value)
 	}
 }

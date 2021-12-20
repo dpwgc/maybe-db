@@ -1,11 +1,11 @@
 package main
 
 import (
-	"MaybeDB/cluster"
 	"MaybeDB/config"
-	"MaybeDB/diskStorage"
-	"MaybeDB/routers"
-	"MaybeDB/servers"
+	"MaybeDB/router"
+	"MaybeDB/server/cluster"
+	"MaybeDB/server/database"
+	"MaybeDB/server/persistent"
 	_ "fmt"
 	_ "github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -21,30 +21,29 @@ func main() {
 	//加载配置文件
 	config.ConfigInit()
 
+	//加载日志记录模块
+	database.LogInit()
+
 	//加载文件操作模块
-	diskStorage.FileInit()
+	persistent.FileInit()
 
-	//是否开启持久化
-	isPersistent := viper.GetInt("db.isPersistent")
-	if isPersistent == 1 {
-		diskStorage.PersInit()
-	}
+	//加载持久化模块
+	persistent.PersInit()
 
-	//是否以集群方式部署
-	isCluster := viper.GetInt("server.isCluster")
-	if isCluster == 1 {
-		cluster.NacosInit()
-		cluster.SyncInit()
-	}
+	//加载Nacos注册中心连接模块
+	cluster.NacosInit()
+
+	//加载主从数据同步模块
+	cluster.SyncInit()
 
 	//加载数据恢复模块
-	diskStorage.RecoveryInit()
+	persistent.RecoveryInit()
 
 	//初始化清理模块
-	servers.ClearInit()
+	database.ClearInit()
 
 	//设置路由
-	r := routers.SetupRouters()
+	r := router.SetupRouters()
 
 	//获取端口号
 	port := viper.GetString("server.port")

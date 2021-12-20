@@ -1,7 +1,7 @@
-package diskStorage
+package persistent
 
 import (
-	"MaybeDB/servers"
+	"MaybeDB/server/database"
 	"encoding/json"
 	"github.com/spf13/viper"
 	"time"
@@ -12,6 +12,12 @@ import (
  */
 
 func PersInit() {
+
+	//是否开启持久化
+	isPersistent := viper.GetInt("db.isPersistent")
+	if isPersistent == 0 {
+		return
+	}
 
 	//是否以集群方式部署
 	isCluster := viper.GetInt("server.isCluster")
@@ -27,7 +33,7 @@ func PersInit() {
 	persistentTime := viper.GetInt("db.persistentTime")
 
 	go func() {
-		servers.Loger.Println("Start persistence")
+		database.Loger.Println("Start persistence")
 		for {
 			//复制本地数据
 			copyDataMap()
@@ -43,10 +49,10 @@ func copyDataMap() {
 
 	copyMap := make(map[string]interface{})
 
-	servers.DataMap.Range(func(key, value interface{}) bool {
+	database.DataMap.Range(func(key, value interface{}) bool {
 		copyMap[key.(string)] = value
 		return true
 	})
 	//将PersCopyMap转为字节数组类型PersCopyByte
-	servers.PersCopyByte, _ = json.Marshal(copyMap)
+	database.PersCopyByte, _ = json.Marshal(copyMap)
 }

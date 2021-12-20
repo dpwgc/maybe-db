@@ -1,4 +1,4 @@
-package servers
+package database
 
 import (
 	"sync"
@@ -11,10 +11,10 @@ import (
 //使用sync.Map存放数据
 var DataMap sync.Map
 
-//主从复制时使用（cluster/sync.go）
+//主从复制时使用（cluster/syncData.go）
 var SyncCopyByte []byte
 
-//持久化时使用（diskStorage/persistent.go）
+//持久化时使用（persistent/persData.go）
 var PersCopyByte []byte
 
 //数据模板

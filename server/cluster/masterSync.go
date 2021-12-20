@@ -1,7 +1,7 @@
 package cluster
 
 import (
-	"MaybeDB/servers"
+	"MaybeDB/server/database"
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -16,7 +16,7 @@ import (
 func GetMasterData(c *gin.Context) {
 
 	//以Json字符串形式返回主节点的全部数据
-	res := string(servers.SyncCopyByte)
+	res := string(database.SyncCopyByte)
 
 	c.String(http.StatusOK, fmt.Sprintln(res))
 }
@@ -26,10 +26,10 @@ func copyDataMap() {
 
 	copyMap := make(map[string]interface{})
 
-	servers.DataMap.Range(func(key, value interface{}) bool {
+	database.DataMap.Range(func(key, value interface{}) bool {
 		copyMap[key.(string)] = value
 		return true
 	})
 	//将SyncCopyMap转为字节数组类型SyncCopyByte
-	servers.SyncCopyByte, _ = json.Marshal(copyMap)
+	database.SyncCopyByte, _ = json.Marshal(copyMap)
 }

@@ -1,7 +1,7 @@
-package clientConns
+package clientConn
 
 import (
-	"MaybeDB/servers"
+	"MaybeDB/server/database"
 	"github.com/gin-gonic/gin"
 	"strings"
 )
@@ -11,23 +11,23 @@ func DetailGet(c *gin.Context) {
 
 	key, _ := c.GetPostForm("key")
 
-	value, _ := servers.DataMap.Load(key)
+	value, _ := database.DataMap.Load(key)
 
 	c.JSON(0, gin.H{
 		"code": 0,
-		"data": value.(servers.Data),
+		"data": value.(database.Data),
 	})
 }
 
 //获取全部数据详情列表（展示数据的过期时间及数据类型）
 func DetailList(c *gin.Context) {
 
-	resMap := make(map[string]servers.Data)
+	resMap := make(map[string]database.Data)
 
 	var count int64 = 0
 
-	servers.DataMap.Range(func(key, value interface{}) bool {
-		resMap[key.(string)] = value.(servers.Data)
+	database.DataMap.Range(func(key, value interface{}) bool {
+		resMap[key.(string)] = value.(database.Data)
 		count++
 		return true
 	})
@@ -48,10 +48,10 @@ func DetailListByKeyword(c *gin.Context) {
 
 	var count int64 = 0
 
-	servers.DataMap.Range(func(key, value interface{}) bool {
+	database.DataMap.Range(func(key, value interface{}) bool {
 		//如果查找到关键字
 		if len(strings.Split(key.(string), keyword)) > 1 {
-			resMap[key.(string)] = value.(servers.Data)
+			resMap[key.(string)] = value.(database.Data)
 			count++
 		}
 		return true
@@ -74,7 +74,7 @@ func DetailListByPrefix(c *gin.Context) {
 
 	var count int64 = 0
 
-	servers.DataMap.Range(func(key, value interface{}) bool {
+	database.DataMap.Range(func(key, value interface{}) bool {
 
 		k := key.(string)
 		//前缀匹配
@@ -86,7 +86,7 @@ func DetailListByPrefix(c *gin.Context) {
 			}
 		}
 		//匹配成功
-		resMap[key.(string)] = value.(servers.Data)
+		resMap[key.(string)] = value.(database.Data)
 		count++
 		return true
 	})
@@ -103,7 +103,7 @@ func Count(c *gin.Context) {
 
 	var count int64 = 0
 
-	servers.DataMap.Range(func(key, value interface{}) bool {
+	database.DataMap.Range(func(key, value interface{}) bool {
 		count++
 		return true
 	})

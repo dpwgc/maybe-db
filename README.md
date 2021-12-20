@@ -42,25 +42,15 @@
 
 ### 项目结构
 
-##### clientConn 客户端连接操作
+##### clientConn 客户端连接
 
-* setConn.go `存储数据相关操作`
+* set.go `存储数据相关操作`
 
-* getConn.go `获取数据相关操作`
+* get.go `获取数据相关操作`
 
-* delConn.go `删除数据相关`
+* del.go `删除数据相关`
 
-* detailConn.go `获取数据详情相关操作`
-
-##### cluster 集群相关
-
-* sync.go `主从节点数据同步协程`
-
-* masterSync.go `主节点同步相关操作`
-
-* slaveSync.go `从节点同步相关操作`
-
-* nacos.go `Nacos注册中心连接`
+* detail.go `获取数据详情相关操作`
 
 ##### config 配置类
 
@@ -68,27 +58,41 @@
 
 * config.go `项目配置文件加载`
 
-##### diskStorage 持久化到硬盘
-
-* fileRW.go `文件读写操作`
-
-* persistent.go `数据持久化`
-
-* recovery.go `数据恢复`
-
-##### middlewares 中间件
+##### middleware 中间件
 
 * safeMiddleware.go `访问密钥验证`
 
-##### routers 路由
+##### router 路由
 
-* routers.go `路由配置`
+* router.go `路由配置`
 
-##### servers 服务层
+##### server 服务层
 
-* clearServer.go `实时清理过期数据`
+* cluster `集群服务`
 
-* dataServer.go `内存数据存储`
+  * syncData.go `主从节点数据同步`
+
+  * masterSync.go `主节点同步相关操作`
+
+  * slaveSync.go `从节点同步相关操作`
+
+  * nacos.go `Nacos注册中心连接`
+
+* database `数据库服务`
+
+    * clear.go `清理过期数据`
+
+  * data.go `内存数据存储`
+
+  * log.go `本地日志记录`
+
+* persistent `持久化服务`
+
+    * fileRW.go `文件读写操作`
+
+  * persData.go `数据持久化`
+
+  * recovery.go `数据恢复`
 
 ##### utils 工具类
 

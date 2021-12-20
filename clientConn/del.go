@@ -1,12 +1,12 @@
-package clientConns
+package clientConn
 
 import (
-	"MaybeDB/cluster"
-	"MaybeDB/servers"
+	"MaybeDB/server/cluster"
+	"MaybeDB/server/database"
 	"MaybeDB/utils"
-	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/nacos-group/nacos-sdk-go/model"
 	"github.com/nacos-group/nacos-sdk-go/vo"
 	"github.com/spf13/viper"
 	"strconv"
@@ -29,7 +29,7 @@ func Del(c *gin.Context) {
 
 	key, _ := c.GetPostForm("key")
 
-	servers.DataMap.Delete(key)
+	database.DataMap.Delete(key)
 
 	// isOtherMaster：判断该数据是否是其他主节点发来的
 	isOtherMaster := c.GetHeader("isOtherMaster")
@@ -59,6 +59,11 @@ func masterDelSync(key string) {
 		HealthyOnly: true,
 	})
 
+	size := len(instances)
+	if size < 2 {
+		return
+	}
+
 	//设置请求头
 	header := make(map[string]string, 2)
 	//标记，表明该请求是主节点集群同步数据，不是客户端发来的数据
@@ -70,20 +75,31 @@ func masterDelSync(key string) {
 	data := make(map[string]string, 4)
 	data["key"] = key
 
-	//向所有主节点发送新增数据
+	//控制通道，用于确保同步工作完成后，再return
+	sendChan := make(chan int, size)
+
+	//同步向所有主节点发送删除指令
 	for _, instance := range instances {
 
-		if instance.Ip == ip && instance.Port == port {
-			//如果遍历到该主节点自己，则跳过
-			continue
-		}
-		url := fmt.Sprintf("%s%s%s%s%s", "http://", instance.Ip, ":", strconv.Itoa(int(instance.Port)), "/Client/Del")
-		resStr, err := utils.PostForm(url, header, data)
+		//开启协程
+		go func(instance model.Instance) {
+			if instance.Ip == ip && instance.Port == port {
+				//如果遍历到该主节点自己，则跳过
+				sendChan <- 1
+			} else {
+				//向其他主节点发送数据
+				url := fmt.Sprintf("%s%s%s%s%s", "http://", instance.Ip, ":", strconv.Itoa(int(instance.Port)), "/Client/Del")
+				_, err := utils.PostForm(url, header, data)
+				if err != nil {
+					database.Loger.Println(err)
+				}
+				sendChan <- 1
+			}
+		}(instance)
+	}
 
-		res := make(map[string]interface{})
-		err = json.Unmarshal([]byte(resStr), &res)
-		if err != nil {
-			servers.Loger.Println(err)
-		}
+	//所有请求都发送完毕后，再return
+	for range instances {
+		<-sendChan
 	}
 }

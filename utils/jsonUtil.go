@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"MaybeDB/servers"
+	"MaybeDB/server/database"
 	"encoding/json"
 )
 
@@ -14,18 +14,18 @@ func JsonToMap(jsonStr string) (map[string]interface{}, error) {
 	m := make(map[string]interface{})
 	err := json.Unmarshal([]byte(jsonStr), &m)
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return nil, err
 	}
 	return m, nil
 }
 
 //json字符串转Data结构体
-func JsonToData(jsonStr string) (map[string]servers.Data, error) {
-	m := make(map[string]servers.Data)
+func JsonToData(jsonStr string) (map[string]database.Data, error) {
+	m := make(map[string]database.Data)
 	err := json.Unmarshal([]byte(jsonStr), &m)
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return nil, err
 	}
 	return m, nil

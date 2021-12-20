@@ -1,7 +1,7 @@
-package diskStorage
+package persistent
 
 import (
-	"MaybeDB/servers"
+	"MaybeDB/server/database"
 	"MaybeDB/utils"
 	"encoding/csv"
 	"github.com/spf13/viper"
@@ -24,11 +24,11 @@ func FileInit() {
 	_, err := os.Stat(path)
 	if err != nil {
 		//创建持久化文件
-		servers.Loger.Println(err)
-		servers.Loger.Println("Create persistent file: " + path)
+		database.Loger.Println(err)
+		database.Loger.Println("Create persistent file: " + path)
 		_, err = os.Create(path)
 		if err != nil {
-			servers.Loger.Println(err)
+			database.Loger.Println(err)
 		}
 	}
 }
@@ -42,17 +42,17 @@ func Write() {
 	writer := csv.NewWriter(wFile)
 
 	//将数据以json字符串形式存入持久化文件
-	jsonStr := string(servers.PersCopyByte)
+	jsonStr := string(database.PersCopyByte)
 	err = writer.Write([]string{jsonStr})
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return
 	}
 	writer.Flush()
 	//关闭文件流
 	err = wFile.Close()
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 	}
 }
 
@@ -62,33 +62,33 @@ func Read() {
 	//读文件，设置为只读，权限设置为777
 	rFile, err = os.OpenFile(path, os.O_RDONLY, 0777)
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return
 	}
 	reader := csv.NewReader(rFile)
 	reader.FieldsPerRecord = -1
 	record, err := reader.ReadAll()
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return
 	}
 	if len(record) == 0 {
-		servers.Loger.Println("The file is empty")
+		database.Loger.Println("The file is empty")
 		return
 	}
 	//解析本地持久化文件的数据到localMap
 	localMap, err := utils.JsonToData(record[0][0])
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return
 	}
 
 	//将本地持久化文件数据（localMap）循环写入从节点map（DataMap）
 	for key, value := range localMap {
-		servers.DataMap.Store(key, value)
+		database.DataMap.Store(key, value)
 	}
 	err = rFile.Close()
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 	}
 }

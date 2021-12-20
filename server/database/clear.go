@@ -1,4 +1,4 @@
-package servers
+package database
 
 import (
 	"time"

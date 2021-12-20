@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"MaybeDB/servers"
+	"MaybeDB/server/database"
 	"io"
 	"net/http"
 	"net/url"
@@ -16,14 +16,14 @@ import (
 var HttpClient http.Client
 
 func init() {
-	HttpClient.Timeout = time.Second * 3
+	HttpClient.Timeout = time.Second * 10
 }
 
 func Get(uri string, header map[string]string) (string, error) {
 
 	request, err := http.NewRequest("GET", uri, nil)
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return "", err
 	}
 	if len(header) > 0 {
@@ -33,13 +33,13 @@ func Get(uri string, header map[string]string) (string, error) {
 	}
 	response, err := HttpClient.Do(request)
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return "", err
 	}
 	defer response.Body.Close()
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return "", err
 	}
 	return string(body), nil
@@ -56,7 +56,7 @@ func PostForm(uri string, header map[string]string, data map[string]string) (str
 
 	request, err := http.NewRequest("POST", uri, strings.NewReader(formData.Encode()))
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return "", err
 	}
 
@@ -72,7 +72,7 @@ func PostForm(uri string, header map[string]string, data map[string]string) (str
 
 	response, err := HttpClient.Do(request)
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return "", err
 	}
 
@@ -80,7 +80,7 @@ func PostForm(uri string, header map[string]string, data map[string]string) (str
 
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
-		servers.Loger.Println(err)
+		database.Loger.Println(err)
 		return "", err
 	}
 
