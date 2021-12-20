@@ -42,12 +42,6 @@
 
 ### 项目结构
 
-##### bin 打包好的文件(直接使用)
-
-* linux `Linux版本`
-
-* windows `Windows版本`
-
 ##### clientConn 客户端连接
 
 * set.go `存储数据相关操作`
