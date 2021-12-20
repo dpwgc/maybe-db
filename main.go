@@ -27,6 +27,9 @@ func main() {
 	//加载文件操作模块
 	persistent.FileInit()
 
+	//加载数据恢复模块
+	persistent.RecoveryInit()
+
 	//加载持久化模块
 	persistent.PersInit()
 
@@ -35,9 +38,6 @@ func main() {
 
 	//加载主从数据同步模块
 	cluster.SyncInit()
-
-	//加载数据恢复模块
-	persistent.RecoveryInit()
 
 	//初始化清理模块
 	database.ClearInit()

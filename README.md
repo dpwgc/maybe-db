@@ -42,6 +42,12 @@
 
 ### 项目结构
 
+##### bin 打包好的文件(直接使用)
+
+* linux `Linux版本`
+
+* windows `Windows版本`
+
 ##### clientConn 客户端连接
 
 * set.go `存储数据相关操作`
@@ -70,17 +76,17 @@
 
 * cluster `集群服务`
 
-  * syncData.go `主从节点数据同步`
+  * sync.go `主从节点数据同步`
 
-  * masterSync.go `主节点同步相关操作`
+  * master.go `主节点同步相关操作`
 
-  * slaveSync.go `从节点同步相关操作`
+  * slave.go `从节点同步相关操作`
 
   * nacos.go `Nacos注册中心连接`
 
 * database `数据库服务`
 
-    * clear.go `清理过期数据`
+  * clear.go `清理过期数据`
 
   * data.go `内存数据存储`
 
@@ -88,7 +94,7 @@
 
 * persistent `持久化服务`
 
-    * fileRW.go `文件读写操作`
+  * fileRW.go `文件读写操作`
 
   * persData.go `数据持久化`
 
@@ -159,23 +165,23 @@ isMaster: 0
 
 ```
 Windows
-/maybe-db                 # 应用文件根目录
-    main.exe              # 打包后的exe文件
+/maybe-db                 # 数据库节点所在文件根目录
+    MaybeDB.exe           # 打包后的exe文件
     /config               # 配置目录
         application.yaml  # 配置文件
     /cache                # Nacos缓存目录
-    /log                  # Nacos日志目录
+    /log                  # 日志目录
     data.csv              # 持久化文件
 ```
 
 ```
 Linux
-/maybe-db                 # 应用文件根目录
-    main                  # 打包后的二进制文件(程序后台执行:setsid ./main)
+/maybe-db                 # 数据库节点所在文件根目录
+    MaybeDB               # 打包后的二进制文件(程序后台执行:setsid ./main)
     /config               # 配置目录
         application.yaml  # 配置文件
     /cache                # Nacos缓存目录
-    /log                  # Nacos日志目录
+    /log                  # 日志目录
     data.csv              # 持久化文件
 ```
 
