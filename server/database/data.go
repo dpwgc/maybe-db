@@ -11,7 +11,7 @@ import (
 //使用sync.Map存放数据
 var DataMap sync.Map
 
-//主从复制时使用（cluster/syncData.go）
+//主从复制时使用（cluster/sync.go）
 var SyncCopyByte []byte
 
 //持久化时使用（persistent/persData.go）
