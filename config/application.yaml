@@ -15,7 +15,7 @@ nacos:
   # 集群命名空间Id（通过namespaceId来区分多个不同的集群）
   namespaceId: maybe-db
   timeoutMs: 3000
-  # 其他配置
+  # Nacos的其他配置
   endpoint:
   regionId:
   accessKey:
